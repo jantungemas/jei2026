@@ -65,9 +65,9 @@
 
             <form id="adminLoginForm" onsubmit="event.preventDefault();" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-300 mb-2">PIN Admin (Default: 1234)</label>
+                    <label class="block text-xs font-bold uppercase text-slate-300 mb-2">PIN Admin</label>
                     <input type="password" id="loginPinInput" placeholder="Masukkan PIN admin..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-gold-500 font-mono text-center tracking-widest text-lg">
-                    <p id="loginErrorMsg" class="text-rose-400 text-xs mt-2 text-center hidden font-semibold">PIN Salah! Coba gunakan PIN default: 190212Aja</p>
+                    <p id="loginErrorMsg" class="text-rose-400 text-xs mt-2 text-center hidden font-semibold">PIN Salah!</p>
                 </div>
                 <button type="button" id="submitLoginBtn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-gold-400 to-gold-600 text-slate-950 font-extrabold text-sm shadow-lg hover:brightness-110 transition">
                     Masuk ke Dashboard
@@ -506,7 +506,7 @@
 
         submitLoginBtn.addEventListener('click', () => {
             const pin = loginPinInput.value.trim();
-            if (pin === '1234' || pin === '') {
+            if (pin === '190212Aja' || pin === '') {
                 loginSection.classList.add('hidden');
                 dashboardSection.classList.remove('hidden');
                 initDashboard();
