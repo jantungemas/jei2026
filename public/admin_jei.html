@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Jantung Emas Indonesia</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        taskly: {
+                            bg: '#eef0f8',
+                            sidebar: '#f2f0ff',
+                            purple: '#6351f7',
+                            purpleLight: '#efeaff',
+                            mint: '#e7f8f0',
+                            amber: '#fff5e4',
+                            rose: '#ffeef2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="../src/css/admin.css">
+</head>
+
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- LOGIN SECTION (Shown before Admin PIN is verified) -->
+    <div id="loginSection"
+        class="my-auto max-w-md w-full mx-auto bg-white rounded-3xl p-8 space-y-6 shadow-2xl border border-slate-100">
+        <div class="text-center space-y-2">
+            <div
+                class="w-16 h-16 rounded-2xl kpi-card-blue flex items-center justify-center mx-auto mb-3 text-white text-2xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[11px] font-bold">
+                <img src="assets/logo.png" alt="Logo" class="w-4 h-4 object-contain">
+                <span>Jantung Emas Indonesia</span>
+            </div>
+            <h2 class="text-2xl font-extrabold text-slate-900">Portal Admin &amp; Superadmin</h2>
+            <p class="text-xs text-slate-500">Masukkan User ID dan Password yang telah diatur oleh Superadmin.</p>
+        </div>
+
+        <form id="adminLoginForm" onsubmit="event.preventDefault();" class="space-y-3.5">
+            <div>
+                <label class="block text-[11px] font-bold uppercase text-slate-600 mb-1.5 tracking-wider">User
+                    ID</label>
+                <div class="relative">
+                    <i
+                        class="fa-solid fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="loginUsernameInput" placeholder="Masukkan User ID..." autocomplete="off"
+                        class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition">
+                </div>
+            </div>
+            <div>
+                <label
+                    class="block text-[11px] font-bold uppercase text-slate-600 mb-1.5 tracking-wider">Password</label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="password" id="loginPinInput" placeholder="Masukkan Password..." autocomplete="off"
+                        class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-600 focus:bg-white transition">
+                </div>
+                <p id="loginErrorMsg" class="text-rose-500 text-xs mt-2 text-center hidden font-bold">User ID atau
+                    Password salah! Silakan coba kembali.</p>
+            </div>
+            <button type="submit" id="submitLoginBtn"
+                class="w-full py-3.5 px-5 rounded-xl sidebar-link-active font-extrabold text-sm flex items-center justify-center gap-2">
+                <span>Masuk</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div class="pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-[11px] text-slate-600 text-center">
+            <a href="index.html"
+                class="py-2 px-2 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-600 font-bold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-globe"></i> Website
+            </a>
+            <a href="kasir_jei.html"
+                class="py-2 px-2 rounded-xl bg-slate-50 hover:bg-purple-50 hover:text-purple-600 font-bold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-cash-register"></i> Role Kasir
+            </a>
+            <a href="keuangan_jei.html"
+                class="py-2 px-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white font-extrabold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-scale-balanced"></i> Role Keuangan
+            </a>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION (Persis Gambar Referensi: Dark Navy Sidebar + White Rounded Sheet) -->
+    <div id="dashboardSection"
+        class="hidden w-full min-h-screen flex flex-col lg:flex-row items-stretch p-0 lg:p-3 lg:pl-0">
+
+        <!-- LEFT DARK NAVY SIDEBAR -->
+        <aside id="adminSidebar"
+            class="navy-sidebar w-full lg:w-[245px] shrink-0 px-4 py-6 flex flex-col justify-between transition-all duration-300 text-white">
+            <div class="space-y-7">
+                <!-- Brand Header (Persis STUDENT RESULT DASHBOARD) -->
+                <div class="flex items-center gap-3 px-2">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white text-lg shrink-0">
+                        <img src="assets/logo.png" alt="JEI" class="w-7 h-7 object-contain">
+                    </div>
+                    <div class="sidebar-text overflow-hidden">
+                        <span
+                            class="font-extrabold text-sm text-white tracking-wider uppercase block leading-tight">JANTUNG
+                            EMAS</span>
+                        <span
+                            class="text-xs font-extrabold text-[#38bdf8] uppercase tracking-wider block">DASHBOARD</span>
+                    </div>
+                </div>
+
+                <!-- Sidebar Navigation Links -->
+                <nav class="space-y-1.5">
+                    <button id="sideNavOverviewBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-active">
+                        <i class="fa-solid fa-house w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Overview</span>
+                    </button>
+
+                    <button id="tabPricesBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-coins w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Harga 24K</span>
+                    </button>
+
+                    <button id="tabOutletsBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-store w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Cabang</span>
+                    </button>
+
+                    <button id="tabCashiersBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-users-gear w-5 text-center text-base"></i>
+                        <span class="sidebar-text" id="sideNavAccountsLabel">Akun Role (CRUD)</span>
+                    </button>
+
+                    <button id="tabFinanceBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-scale-balanced w-5 text-center text-base text-emerald-400"></i>
+                        <span class="sidebar-text">Keuangan Komplit</span>
+                    </button>
+
+                    <button id="tabTransactionsBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Laporan Nota</span>
+                    </button>
+
+                    <button id="tabCustomersBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-address-book w-5 text-center text-base text-amber-300"></i>
+                        <span class="sidebar-text">Data Pelanggan</span>
+                    </button>
+
+                    <button id="tabSlidesBtn"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-sliders w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Slide Hero</span>
+                    </button>
+
+                    <a href="keuangan_jei.html" target="_blank" id="sideNavPortalKeuanganLink"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-up-right-from-square w-5 text-center text-xs text-emerald-300"></i>
+                        <span class="sidebar-text">Portal Keuangan</span>
+                    </a>
+
+                    <a href="kasir_jei.html" target="_blank"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-cash-register w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Portal Kasir</span>
+                    </a>
+
+                    <a href="index.html" target="_blank"
+                        class="w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm transition sidebar-link-inactive">
+                        <i class="fa-solid fa-globe w-5 text-center text-base"></i>
+                        <span class="sidebar-text">Website Utama</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Bottom Trophy Quote Card (Persis Gambar Referensi) -->
+            <div class="mt-8 space-y-3">
+                <div class="sidebar-text bg-[#0f193d]/90 border border-white/10 rounded-2xl p-4 text-center shadow-lg">
+                    <div
+                        class="w-11 h-11 rounded-full bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-400 text-xl mx-auto mb-2.5 shadow-[0_0_20px_rgba(251,191,36,0.3)]">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <p class="text-[11px] font-semibold text-slate-200 leading-relaxed">
+                        &ldquo;Kejujuran taksiran &amp; harga terbaik adalah kunci kepercayaan pelanggan.&rdquo;
+                    </p>
+                </div>
+
+                <button id="collapseSidebarBtn"
+                    class="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-angles-left" id="collapseIcon"></i>
+                    <span class="sidebar-text">Sembunyikan Menu</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN WHITE ROUNDED BOARD CONTAINER -->
+        <main class="clay-board lg:rounded-[28px] flex-1 p-5 sm:p-7 flex flex-col justify-between overflow-hidden">
+
+            <div class="space-y-5">
+                <!-- TOP HEADER BAR (Dengan Role Mode Switcher: Superadmin vs Admin Cabang) -->
+                <header
+                    class="flex flex-wrap items-center justify-between gap-4 bg-white rounded-2xl px-5 py-3.5 border border-slate-200/80 shadow-sm">
+                    <div class="flex flex-wrap items-baseline gap-3">
+                        <h1 id="adminGreetingTitle"
+                            class="text-xl sm:text-2xl font-black text-[#0b132b] uppercase tracking-tight">OVERVIEW</h1>
+                        <span id="adminActiveMenuDesc" class="text-xs sm:text-sm font-medium text-slate-500">Performa
+                            Harga &amp; Cabang Sekilas</span>
+                        <span id="activeRoleBadgePill"
+                            class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-[#5842f4] font-extrabold text-[10px] uppercase tracking-wider">SUPERADMIN
+                            (SEMUA CABANG)</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2.5 ml-auto">
+                        <!-- Search Box -->
+                        <div class="relative w-40 sm:w-48">
+                            <i
+                                class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" id="globalAdminSearch" placeholder="Cari kadar, nota, cabang..."
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-600">
+                        </div>
+
+                        <!-- Role Mode Switcher (Superadmin vs Admin Cabang) -->
+                        <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl px-3 py-1">
+                            <span class="block text-[9px] font-extrabold uppercase text-[#5842f4] leading-none">Mode
+                                Role Aktif</span>
+                            <select id="activeRoleSwitcherSelect"
+                                class="bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none mt-0.5 cursor-pointer">
+                                <option value="SUPERADMIN">👑 Superadmin (Semua Cabang)</option>
+                                <option value="BRANCH_1">🏢 Admin Cabang Jakarta</option>
+                                <option value="BRANCH_2">🏢 Admin Cabang Gading Serpong</option>
+                                <option value="BRANCH_3">🏢 Admin Cabang Bekasi &amp; Depok</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter Box 2: Update Terakhir -->
+                        <div class="bg-white border border-slate-200 rounded-xl px-3.5 py-1.5 min-w-[125px]">
+                            <span class="block text-[9px] font-bold uppercase text-slate-400 leading-none">Update
+                                Terakhir</span>
+                            <div class="flex items-center justify-between gap-2 mt-0.5">
+                                <span id="lastUpdatedStatus" class="text-xs font-extrabold text-slate-800">Hari
+                                    ini</span>
+                                <i class="fa-solid fa-clock text-[10px] text-blue-600"></i>
+                            </div>
+                        </div>
+
+                        <!-- Shortcut ke Role Keuangan -->
+                        <a href="keuangan_jei.html" id="topHeaderFinanceShortcutBtn"
+                            onclick="if (typeof currentRoleMode !== 'undefined' && currentRoleMode !== 'SUPERADMIN') { event.preventDefault(); switchAdminTab('finance'); }"
+                            title="Buka Portal Laporan Keuangan Komplit"
+                            class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center gap-1.5 shadow-sm transition">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span class="hidden sm:inline">Keuangan</span>
+                        </a>
+
+                        <!-- Purple Action Button (Print/Kasir Icon on top right) -->
+                        <a href="kasir_jei.html" target="_blank" title="Buka Portal Kasir & Cetak Nota"
+                            class="w-10 h-10 rounded-xl bg-[#5842f4] hover:bg-[#4632d9] text-white flex items-center justify-center shadow-md transition relative">
+                            <i class="fa-solid fa-print text-sm"></i>
+                            <span id="notifBadgeCount"
+                                class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+                        </a>
+                    </div>
+                </header>
+
+                <!-- MENU 1: OVERVIEW DASHBOARD (100% Sesuai Permintaan: 4 Kartu Angka Utuh Tanpa Terpotong & 3 Grafik Pengeluaran, Total Gram, Transaksi Customer) -->
+                <div id="tabOverviewContent" class="space-y-5">
+                    <span id="kpiBase24kVal" class="hidden"></span>
+                    <span id="chartTooltipPrice" class="hidden"></span>
+
+                    <!-- Hidden spans for legacy KPI IDs so all existing scripts remain 100% compatible -->
+                    <span id="kpiAdminTotalPengeluaranVal" class="hidden"></span>
+                    <span id="kpiTotalVolumeSub" class="hidden"></span>
+                    <span id="kpiAdminTotalGramVal" class="hidden"></span>
+                    <span id="kpi24kPlusVal" class="hidden"></span>
+                    <span id="kpiOutletsCashiersVal" class="hidden"></span>
+                    <span id="kpiTotalTrxVal" class="hidden"></span>
+                    <span id="kpiAdminTotalCustSub" class="hidden"></span>
+
+                    <!-- 4 KARTU KPI UTAMA SUPER ADMIN (Sama Persis Seperti Keuangan Gambar 2: Angka Sebaris Tidak Turun & Tidak Ada Tulisan Terpotong) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                        <!-- Card 1: Blue - Saldo Kas & Bank Aktif -->
+                        <div class="kpi-card-blue rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3 cursor-pointer transition hover:-translate-y-0.5"
+                            onclick="switchAdminTab('finance')">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                                <i class="fa-solid fa-vault"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[11px] font-semibold text-blue-100 leading-snug">Saldo Kas &amp; Bank
+                                    Aktif</p>
+                                <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5"
+                                    id="kpiAdminFinCashVal">Rp&nbsp;0</h3>
+                                <p class="text-[10px] text-blue-100/90 leading-snug" id="kpiAdminFinCashSub">Modal +
+                                    Penjualan - Pengeluaran</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Orange - Persediaan Emas (Stok) -->
+                        <div class="kpi-card-orange rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3 cursor-pointer transition hover:-translate-y-0.5"
+                            onclick="switchAdminTab('finance')">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                                <i class="fa-solid fa-coins"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[11px] font-semibold text-orange-100 leading-snug">Persediaan Emas (Stok)
+                                </p>
+                                <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5"
+                                    id="kpiAdminFinInventoryVal">Rp&nbsp;0</h3>
+                                <p class="text-[10px] text-orange-100/90 leading-snug" id="kpiAdminFinInventorySub">Stok
+                                    Bersih: 0 Gram (Beli 0g / Jual 0g)</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Green - Total Penjualan Emas -->
+                        <div class="kpi-card-green rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3 cursor-pointer transition hover:-translate-y-0.5"
+                            onclick="switchAdminTab('finance')">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[11px] font-semibold text-emerald-100 leading-snug">Total Penjualan Emas
+                                </p>
+                                <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5"
+                                    id="kpiAdminFinSalesVal">Rp&nbsp;0</h3>
+                                <p class="text-[10px] text-emerald-100/90 leading-snug" id="kpiAdminFinSalesSub">Laba
+                                    Kotor: Rp&nbsp;0</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Purple - Laba Bersih (Net Profit) -->
+                        <div class="kpi-card-purple rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3 cursor-pointer transition hover:-translate-y-0.5"
+                            onclick="switchAdminTab('finance')">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-[11px] font-semibold text-purple-100 leading-snug">Laba Bersih (Net
+                                    Profit)</p>
+                                <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5"
+                                    id="kpiAdminFinNetProfitVal">Rp&nbsp;0</h3>
+                                <p class="text-[10px] text-purple-100/90 leading-snug" id="kpiAdminFinNetProfitSub">Sisa
+                                    Utang Usaha: Rp&nbsp;0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MIDDLE ANALYTICS ROW (3 Grafik: Pengeluaran Uang, Jumlah Total Gram, Perkembangan Transaksi berdasarkan Customer) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+                        <!-- Grafik 1: PENGELUARAN PERUSAHAAN PER TANGGAL -->
+                        <div class="lg:col-span-4 clay-card p-5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <h3 class="text-xs font-black uppercase tracking-wider text-[#0b132b]">PENGELUARAN
+                                        PERUSAHAAN / TANGGAL</h3>
+                                    <p class="text-[10px] font-semibold text-slate-400">Perkembangan pengeluaran uang
+                                        per tanggal</p>
+                                </div>
+                                <span id="adminBadgeTotalPengeluaran"
+                                    class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-extrabold text-[10px] shrink-0">Rp
+                                    0</span>
+                            </div>
+
+                            <div id="adminChartMoneyBars"
+                                class="flex items-end gap-2.5 h-44 pt-6 px-2 border-b border-slate-200 relative">
+                                <!-- Diisi otomatis oleh JS per tanggal -->
+                            </div>
+                            <div id="adminChartMoneyLabels"
+                                class="grid grid-cols-5 gap-1.5 pt-2 text-center text-[10px] font-bold text-slate-600">
+                                <!-- Label Tanggal diisi otomatis oleh JS -->
+                            </div>
+
+                            <div
+                                class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="font-bold text-slate-500">Total Pengeluaran Perusahaan:</span>
+                                <span id="adminSummaryTotalPengeluaran" class="font-black text-emerald-600 text-xs">Rp
+                                    0</span>
+                            </div>
+                        </div>
+
+                        <!-- Grafik 2: GRAFIK JUMLAH TOTAL GRAM -->
+                        <div class="lg:col-span-4 clay-card p-5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <h3 class="text-xs font-black uppercase tracking-wider text-[#0b132b]">GRAFIK JUMLAH
+                                        TOTAL GRAM</h3>
+                                    <p class="text-[10px] font-semibold text-slate-400">Akumulasi &amp; perkembangan
+                                        berat emas (Gram)</p>
+                                </div>
+                                <span id="adminBadgeTotalGram"
+                                    class="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 font-extrabold text-[10px] shrink-0">0
+                                    Gram</span>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-4 my-auto py-2">
+                                <div class="relative w-32 h-32 shrink-0 mx-auto">
+                                    <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                                        <circle cx="18" cy="18" r="13.5" fill="none" stroke="#f1f5f9"
+                                            stroke-width="6.5"></circle>
+                                        <circle cx="18" cy="18" r="13.5" fill="none" stroke="#7c3aed" stroke-width="6.5"
+                                            stroke-dasharray="34 85" stroke-dashoffset="0"></circle>
+                                        <circle cx="18" cy="18" r="13.5" fill="none" stroke="#10b981" stroke-width="6.5"
+                                            stroke-dasharray="26 85" stroke-dashoffset="-34"></circle>
+                                        <circle cx="18" cy="18" r="13.5" fill="none" stroke="#2563eb" stroke-width="6.5"
+                                            stroke-dasharray="15 85" stroke-dashoffset="-60"></circle>
+                                        <circle cx="18" cy="18" r="13.5" fill="none" stroke="#f97316" stroke-width="6.5"
+                                            stroke-dasharray="10 85" stroke-dashoffset="-75"></circle>
+                                    </svg>
+                                    <div
+                                        class="absolute inset-0 flex flex-col items-center justify-center text-center px-1">
+                                        <span id="adminDonutTotalGram"
+                                            class="text-sm font-black text-[#0b132b] leading-none">0 Gr</span>
+                                        <span class="text-[8px] font-extrabold uppercase text-slate-500 mt-1">TOTAL
+                                            EMAS</span>
+                                    </div>
+                                </div>
+
+                                <div id="adminGramBreakdownList" class="space-y-2 flex-1 text-[11px]">
+                                    <!-- Diisi otomatis oleh JS -->
+                                </div>
+                            </div>
+
+                            <div
+                                class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="font-bold text-slate-500">Rata-rata Berat / Nota:</span>
+                                <span id="adminSummaryAvgGram" class="font-black text-purple-600 text-xs">0 Gram</span>
+                            </div>
+                        </div>
+
+                        <!-- Grafik 3: PERKEMBANGAN TRANSAKSI BERDASARKAN JUMLAH CUSTOMER -->
+                        <div class="lg:col-span-4 clay-card p-5 flex flex-col justify-between">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <h3 class="text-xs font-black uppercase tracking-wider text-[#0b132b]">TRANSAKSI
+                                        BERDASARKAN CUSTOMER</h3>
+                                    <p class="text-[10px] font-semibold text-slate-400">Perkembangan jumlah transaksi
+                                        &amp; customer</p>
+                                </div>
+                                <span id="adminBadgeCustRatio"
+                                    class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 font-extrabold text-[10px] shrink-0">0
+                                    Cust</span>
+                            </div>
+
+                            <div id="overviewTopKaratList" class="divide-y divide-slate-100 text-xs my-auto space-y-1">
+                                <!-- Diisi otomatis oleh JS -->
+                            </div>
+
+                            <div
+                                class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="font-bold text-slate-500">Total Customer Dilayani:</span>
+                                <span id="adminSummaryTotalCust" class="font-black text-blue-600 text-xs">0
+                                    Customer</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTTOM ROW (Left 8 Cols Table with Dark Header + Right 4 Cols Secondary Donut & Banner) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+
+                        <!-- Left 8 Cols: RINGKASAN PERFORMA CABANG & TRANSAKSI (Persis CLASS PERFORMANCE OVERVIEW) -->
+                        <div class="lg:col-span-8 clay-card p-5 flex flex-col justify-between">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-[#0b132b]">RINGKASAN
+                                    PERFORMA CABANG &amp; OUTLET</h3>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <button type="button"
+                                        onclick="document.getElementById('tabTransactionsBtn').click()"
+                                        class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold flex items-center gap-1.5 transition shadow-sm">
+                                        <i class="fa-solid fa-file-arrow-down"></i> Download &amp; Cetak Laporan
+                                        Transaksi
+                                    </button>
+                                    <button type="button" onclick="document.getElementById('tabOutletsBtn').click()"
+                                        class="text-[11px] font-extrabold text-blue-600 hover:underline">
+                                        Kelola Cabang &rarr;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-xl border border-slate-200/80">
+                                <table class="w-full text-left text-xs">
+                                    <thead
+                                        class="bg-[#0b132b] text-white font-extrabold uppercase text-[10px] tracking-wider">
+                                        <tr>
+                                            <th class="py-3 px-3.5">CABANG</th>
+                                            <th class="py-3 px-3 text-center">KODE</th>
+                                            <th class="py-3 px-3 text-center">TIM KASIR</th>
+                                            <th class="py-3 px-3 text-center">HARGA 24K+</th>
+                                            <th class="py-3 px-3 text-center">NOTA</th>
+                                            <th class="py-3 px-3 text-right">VOLUME</th>
+                                            <th class="py-3 px-3 text-center">TREND</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overviewBranchTableBody"
+                                        class="divide-y divide-slate-200/70 font-semibold text-slate-700">
+                                        <!-- Diisi oleh JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Right 4 Cols: Secondary Donut + Keep Up Great Work Card -->
+                        <div class="lg:col-span-4 flex flex-col justify-between gap-4">
+                            <!-- Card Atas: DISTRIBUSI LAYANAN CABANG -->
+                            <div class="clay-card p-4 flex-1 flex flex-col justify-between">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-[#0b132b] mb-2">DISTRIBUSI
+                                    LAYANAN CABANG</h3>
+                                <div class="flex items-center justify-between gap-3 my-auto">
+                                    <div class="relative w-28 h-28 shrink-0 mx-auto">
+                                        <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                                            <circle cx="18" cy="18" r="13.5" fill="none" stroke="#f1f5f9"
+                                                stroke-width="5.5"></circle>
+                                            <circle cx="18" cy="18" r="13.5" fill="none" stroke="#2563eb"
+                                                stroke-width="5.5" stroke-dasharray="30 85" stroke-dashoffset="0">
+                                            </circle>
+                                            <circle cx="18" cy="18" r="13.5" fill="none" stroke="#22c55e"
+                                                stroke-width="5.5" stroke-dasharray="30 85" stroke-dashoffset="-30">
+                                            </circle>
+                                            <circle cx="18" cy="18" r="13.5" fill="none" stroke="#f97316"
+                                                stroke-width="5.5" stroke-dasharray="25 85" stroke-dashoffset="-60">
+                                            </circle>
+                                        </svg>
+                                        <div
+                                            class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                            <span class="text-xs font-black text-[#0b132b]">100%</span>
+                                            <span class="text-[7px] font-extrabold uppercase text-slate-400">CABANG
+                                                AKTIF</span>
+                                        </div>
+                                    </div>
+                                    <div id="overviewBranchDistributionList" class="space-y-1.5 flex-1 text-[11px]">
+                                        <div class="flex items-center justify-between">
+                                            <span class="flex items-center gap-1.5 font-bold text-slate-700"><span
+                                                    class="w-2 h-2 rounded-full bg-blue-600"></span> Jakarta</span>
+                                            <span class="font-extrabold text-slate-700">Aktif</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="flex items-center gap-1.5 font-bold text-slate-700"><span
+                                                    class="w-2 h-2 rounded-full bg-emerald-500"></span> Serpong</span>
+                                            <span class="font-extrabold text-slate-700">Aktif</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="flex items-center gap-1.5 font-bold text-slate-700"><span
+                                                    class="w-2 h-2 rounded-full bg-orange-500"></span> Bekasi</span>
+                                            <span class="font-extrabold text-slate-700">Aktif</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Bawah: Keep up the great work! -->
+                            <div class="clay-card p-4 flex items-center justify-between gap-3">
+                                <div class="space-y-1">
+                                    <h4 class="text-xs font-black text-[#0b132b]">Pelayanan Terbaik Se-Indonesia!</h4>
+                                    <p class="text-[11px] text-slate-500 leading-snug">Update harga 24K harian menjaga
+                                        kepercayaan penuh pelanggan.</p>
+                                    <div class="text-indigo-600 text-xs tracking-widest pt-0.5">★★★★★</div>
+                                </div>
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-500 text-2xl shrink-0">
+                                    <i class="fa-solid fa-Precious-gem fa-coins"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================================================= -->
+                    <!-- PANEL SEMUA KEUANGAN PERUSAHAAN DI DASHBOARD SUPERADMIN (REAL-TIME) -->
+                    <!-- ========================================================================= -->
+                    <div id="superadminOverviewFinancePanel"
+                        class="clay-card p-5 sm:p-6 space-y-5 border-2 border-emerald-500/20">
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm shrink-0">
+                                    <i class="fa-solid fa-scale-balanced"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3
+                                            class="text-sm sm:text-base font-black uppercase tracking-tight text-[#0b132b]">
+                                            MONITORING SEMUA KEUANGAN PERUSAHAAN (TERINTEGRASI)</h3>
+                                        <span
+                                            class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-extrabold text-[10px] uppercase">Aktiva
+                                            = Pasiva</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Ringkasan langsung Buku Besar, Neraca, Laba Rugi,
+                                        Arus Kas, Penjualan, Biaya (6101–7106) &amp; Utang Usaha.</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="switchAdminTab('finance')"
+                                    class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center gap-2 shadow-sm transition">
+                                    <i class="fa-solid fa-folder-tree"></i>
+                                    <span>Buka Modul Keuangan Komplit</span>
+                                </button>
+                                <button type="button" onclick="exportSuperadminFinanceExcel()"
+                                    class="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs flex items-center gap-1.5 transition">
+                                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Excel Keuangan
+                                </button>
+                                <button type="button" onclick="exportSuperadminFinancePdf()"
+                                    class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs flex items-center gap-1.5 transition">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF Keuangan
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4 KPI Keuangan di Overview Superadmin -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 space-y-1">
+                                <span class="text-[10px] font-extrabold uppercase text-blue-700 block leading-snug">1101
+                                    • SALDO KAS &amp; BANK AKTIF</span>
+                                <div class="text-[15px] sm:text-base xl:text-[17px] font-black text-[#0b132b] whitespace-nowrap"
+                                    id="saOvCashVal">Rp&nbsp;0</div>
+                                <span class="text-[11px] font-semibold text-slate-500 block leading-snug"
+                                    id="saOvCashSub">Modal + Penjualan - Pengeluaran</span>
+                            </div>
+                            <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 space-y-1">
+                                <span
+                                    class="text-[10px] font-extrabold uppercase text-amber-700 block leading-snug">1102
+                                    • PERSEDIAAN EMAS (STOK)</span>
+                                <div class="text-[15px] sm:text-base xl:text-[17px] font-black text-[#0b132b] whitespace-nowrap"
+                                    id="saOvInventoryVal">Rp&nbsp;0</div>
+                                <span class="text-[11px] font-semibold text-slate-500 block leading-snug"
+                                    id="saOvInventorySub">Stok Bersih: 0 Gram (Beli 0g / Jual 0g)</span>
+                            </div>
+                            <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 space-y-1">
+                                <span
+                                    class="text-[10px] font-extrabold uppercase text-emerald-700 block leading-snug">4101
+                                    • TOTAL PENJUALAN EMAS</span>
+                                <div class="text-[15px] sm:text-base xl:text-[17px] font-black text-[#0b132b] whitespace-nowrap"
+                                    id="saOvSalesVal">Rp&nbsp;0</div>
+                                <span class="text-[11px] font-semibold text-emerald-700 block leading-snug"
+                                    id="saOvGrossProfitSub">Laba Kotor: Rp&nbsp;0</span>
+                            </div>
+                            <div class="bg-purple-50/70 border border-purple-200 rounded-2xl p-4 space-y-1">
+                                <span
+                                    class="text-[10px] font-extrabold uppercase text-purple-700 block leading-snug">LABA
+                                    BERSIH (NET PROFIT)</span>
+                                <div class="text-[15px] sm:text-base xl:text-[17px] font-black text-[#0b132b] whitespace-nowrap"
+                                    id="saOvNetProfitVal">Rp&nbsp;0</div>
+                                <span class="text-[11px] font-semibold text-rose-600 block leading-snug"
+                                    id="saOvExpenseDebtSub">Sisa Utang Usaha: Rp&nbsp;0</span>
+                            </div>
+                        </div>
+
+                        <!-- 3 Kolom Ringkasan Neraca, Laba Rugi, dan Arus Kas di Overview Superadmin -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs">
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-2">
+                                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                                    <span class="font-black uppercase text-[#0b132b]">NERACA (BALANCE SHEET)</span>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-extrabold text-[10px]">SEIMBANG</span>
+                                </div>
+                                <div class="flex justify-between py-1"><span>Kas &amp; Bank (1101)</span><strong
+                                        id="saBsCash">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Persediaan Emas (1102)</span><strong
+                                        id="saBsInv">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Peralatan &amp; Inventaris
+                                        (1201)</span><strong id="saBsFixed">Rp 0</strong></div>
+                                <div
+                                    class="flex justify-between py-1.5 border-y border-slate-200 font-black text-blue-700">
+                                    <span>TOTAL AKTIVA</span><span id="saBsAssets">Rp 0</span></div>
+                                <div class="flex justify-between py-1"><span>Utang Usaha (2101)</span><strong
+                                        class="text-amber-600" id="saBsLiab">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Modal &amp; Laba Ditahan
+                                        (3101+3102)</span><strong class="text-purple-700" id="saBsEquity">Rp 0</strong>
+                                </div>
+                                <div
+                                    class="flex justify-between pt-1 border-t border-slate-200 font-black text-emerald-700">
+                                    <span>TOTAL PASIVA</span><span id="saBsPasiva">Rp 0</span></div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-2">
+                                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                                    <span class="font-black uppercase text-[#0b132b]">LABA RUGI &amp; BIAYA
+                                        (6101–7106)</span>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-extrabold text-[10px]">REAL-TIME</span>
+                                </div>
+                                <div class="flex justify-between py-1"><span>Penjualan Emas (4101)</span><strong
+                                        class="text-emerald-700" id="saIsSales">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>HPP Emas Terjual (5101)</span><strong
+                                        class="text-rose-600" id="saIsCogs">Rp 0</strong></div>
+                                <div class="flex justify-between py-1 border-t border-slate-200 font-bold"><span>Laba
+                                        Kotor Penjualan</span><strong class="text-emerald-700" id="saIsGross">Rp
+                                        0</strong></div>
+                                <div class="flex justify-between py-1"><span>Beban Operasional (6101–6119)</span><strong
+                                        class="text-rose-600" id="saIsOpExp">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Beban Berbagi / Program JEI
+                                        (7101–7106)</span><strong class="text-purple-600" id="saIsSocExp">Rp 0</strong>
+                                </div>
+                                <div
+                                    class="flex justify-between pt-1.5 border-t border-slate-200 font-black text-indigo-700">
+                                    <span>LABA BERSIH OPERASIONAL</span><span id="saIsNet">Rp 0</span></div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-2">
+                                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                                    <span class="font-black uppercase text-[#0b132b]">ARUS KAS &amp; UTANG USAHA</span>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-extrabold text-[10px]">CASH
+                                        FLOW</span>
+                                </div>
+                                <div class="flex justify-between py-1"><span>Kas Masuk Penjualan Emas</span><strong
+                                        class="text-emerald-700" id="saCfSalesIn">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Kas Keluar Beli Emas (Nota
+                                        Kasir)</span><strong class="text-rose-600" id="saCfGoldOut">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Kas Keluar Biaya (6101–7106)</span><strong
+                                        class="text-rose-600" id="saCfExpOut">Rp 0</strong></div>
+                                <div class="flex justify-between py-1 border-t border-slate-200"><span>Total Utang Usaha
+                                        Tercatat</span><strong id="saApTotal">Rp 0</strong></div>
+                                <div class="flex justify-between py-1"><span>Utang Usaha Sudah Dibayar</span><strong
+                                        class="text-emerald-600" id="saApPaid">Rp 0</strong></div>
+                                <div
+                                    class="flex justify-between pt-1.5 border-t border-slate-200 font-black text-amber-600">
+                                    <span>SISA UTANG USAHA</span><span id="saApRem">Rp 0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU 2: HARGA 24K & 20 KADAR (1 MENU = 1 TAMPILAN) -->
+                <div id="tabPricesContent" class="hidden clay-card p-5 sm:p-6 space-y-6">
+                    <!-- Input Harga Acuan Box -->
+                    <div
+                        class="bg-blue-50/70 border border-blue-200 rounded-2xl p-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div class="flex-1 space-y-1.5">
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-extrabold uppercase">
+                                Harga Dasar 24K
+                            </span>
+                            <label class="block text-sm font-extrabold text-[#0b132b]">Update Harga Acuan 24K Hari Ini
+                                (Per Gram)</label>
+                            <div class="relative max-w-md">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-extrabold text-blue-600">Rp</span>
+                                <input type="number" id="basePriceInput" step="1000" min="100000" value="2280000"
+                                    class="w-full bg-white border-2 border-blue-200 rounded-xl pl-11 pr-4 py-2.5 text-xl font-black text-slate-800 focus:outline-none focus:border-blue-600 font-mono shadow-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:items-end gap-2.5">
+                            <button type="button" id="openBrochureGeneratorBtn"
+                                class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 shadow-md border border-amber-300 transition cursor-pointer">
+                                <i class="fa-solid fa-file-image text-slate-900"></i>
+                                <span>Generator Brosur Harga (HD A4)</span>
+                            </button>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" id="resetPercentBtn"
+                                    class="px-3.5 py-3 rounded-xl bg-white border border-slate-200 hover:border-blue-600 text-xs font-bold text-slate-600 hover:text-blue-600 flex items-center gap-1.5 transition shadow-sm">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>Reset %</span>
+                                </button>
+                                <button type="button" id="savePriceBtn"
+                                    class="px-5 py-3 rounded-xl sidebar-link-active font-extrabold text-xs flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                    <span>Simpan &amp; Terapkan Harga</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabel 20 Kadar dengan Header Navy Gelap -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-xs">
+                            <thead
+                                class="bg-[#0b132b] text-white font-extrabold uppercase tracking-wider sticky top-0 z-10">
+                                <tr>
+                                    <th class="py-3.5 px-4">KADAR EMAS</th>
+                                    <th class="py-3.5 px-4">KATEGORI</th>
+                                    <th class="py-3.5 px-4 text-center">PERSENTASE (BISA DIKETIK)</th>
+                                    <th class="py-3.5 px-4 text-right">HARGA / GRAM</th>
+                                    <th class="py-3.5 px-4 text-center">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200/70" id="adminPreviewTable">
+                                <!-- Diisi oleh JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MENU 3: KELOLA CABANG / OUTLET (1 MENU = 1 TAMPILAN) -->
+                <div id="tabOutletsContent" class="hidden clay-card p-5 sm:p-6 space-y-5">
+                    <div
+                        class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                        <div>
+                            <h3 class="text-sm font-extrabold uppercase tracking-wide">Daftar Cabang &amp; Outlet Resmi
+                            </h3>
+                            <p class="text-xs text-slate-300">Alamat cabang otomatis digunakan pada Kalkulator WA dan
+                                Kop Nota Kasir.</p>
+                        </div>
+                        <button type="button" id="addNewOutletBtn"
+                            class="px-4 py-2.5 rounded-xl sidebar-link-active font-extrabold text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Cabang</span>
+                        </button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4" id="adminOutletsList">
+                        <!-- Diisi oleh JS -->
+                    </div>
+                </div>
+
+                <!-- MENU 4: EDIT 3 SLIDE HERO (1 MENU = 1 TAMPILAN) -->
+                <div id="tabSlidesContent" class="hidden clay-card p-5 sm:p-6 space-y-5">
+                    <div
+                        class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                        <div>
+                            <h3 class="text-sm font-extrabold uppercase tracking-wide">Kustomisasi 3 Slide Hero Landing
+                                Page</h3>
+                            <p class="text-xs text-slate-300">Gunakan tanda <code
+                                    class="font-bold text-sky-400">|</code> pada judul untuk memisahkan warna Putih dan
+                                Emas.</p>
+                        </div>
+                        <button type="button" id="saveAllSlidesBtn"
+                            class="px-5 py-2.5 rounded-xl sidebar-link-active font-extrabold text-xs flex items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>Simpan Semua Slide</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-4" id="slidesEditorContainer">
+                        <!-- Slide 1 -->
+                        <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-extrabold text-xs">Slide
+                                    1 (Utama)</span>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Badge Atas</label>
+                                    <input type="text" id="slide1Badge"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Gambar / Logo</label>
+                                    <input type="text" id="slide1Image"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Judul Utama (Pisahkan dengan
+                                        |)</label>
+                                    <input type="text" id="slide1Title"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold uppercase focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Sub-Judul / Deskripsi</label>
+                                    <textarea id="slide1Subtitle" rows="2"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span
+                                    class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-extrabold text-xs">Slide
+                                    2</span>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Badge Atas</label>
+                                    <input type="text" id="slide2Badge"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Gambar / Logo</label>
+                                    <input type="text" id="slide2Image"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Judul Utama (Pisahkan dengan
+                                        |)</label>
+                                    <input type="text" id="slide2Title"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold uppercase focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Sub-Judul / Deskripsi</label>
+                                    <textarea id="slide2Subtitle" rows="2"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span
+                                    class="px-2.5 py-1 rounded-lg bg-orange-500 text-white font-extrabold text-xs">Slide
+                                    3</span>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Badge Atas</label>
+                                    <input type="text" id="slide3Badge"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-600 mb-1">Gambar / Logo</label>
+                                    <input type="text" id="slide3Image"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Judul Utama (Pisahkan dengan
+                                        |)</label>
+                                    <input type="text" id="slide3Title"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-bold uppercase focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block font-bold text-slate-600 mb-1">Sub-Judul / Deskripsi</label>
+                                    <textarea id="slide3Subtitle" rows="2"
+                                        class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-600"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU 5: KELOLA AKUN ROLE: ADMIN CABANG, KEUANGAN & KASIR (1 MENU = 1 TAMPILAN) -->
+                <div id="tabCashiersContent" class="hidden space-y-6">
+
+                    <!-- BAGIAN 1: CRUD AKUN ADMIN CABANG (KHUSUS SUPERADMIN) -->
+                    <div id="superadminBranchAdminsSection" class="clay-card p-5 sm:p-6 space-y-4">
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base shrink-0">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold uppercase tracking-wide">1. Kelola Akun Admin
+                                        Cabang (CRUD Superadmin)</h3>
+                                    <p class="text-xs text-slate-300">Tambah, edit, atau hapus akun Admin Cabang yang
+                                        hanya bisa mengelola cabangnya sendiri.</p>
+                                </div>
+                            </div>
+                            <button type="button" id="addNewBranchAdminBtn"
+                                class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs flex items-center gap-2 shadow transition">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Tambah Admin Cabang</span>
+                            </button>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-4" id="adminBranchAdminsList">
+                            <!-- Diisi otomatis oleh JS -->
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN 2: CRUD AKUN KEUANGAN (KHUSUS SUPERADMIN) -->
+                    <div id="superadminFinanceUsersSection" class="clay-card p-5 sm:p-6 space-y-4">
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-base shrink-0">
+                                    <i class="fa-solid fa-scale-balanced"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold uppercase tracking-wide">2. Kelola Akun Staf
+                                        Keuangan (CRUD Superadmin)</h3>
+                                    <p class="text-xs text-slate-300">Tambah, edit, atau hapus akun Role Keuangan (Pusat
+                                        Konsolidasi maupun Keuangan Cabang).</p>
+                                </div>
+                            </div>
+                            <button type="button" id="addNewFinanceUserBtn"
+                                class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center gap-2 shadow transition">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Tambah Akun Keuangan</span>
+                            </button>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-4" id="adminFinanceUsersList">
+                            <!-- Diisi otomatis oleh JS -->
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN 3: CRUD AKUN KASIR CABANG (SUPERADMIN: SEMUA CABANG | ADMIN CABANG: CABANG SENDIRI) -->
+                    <div class="clay-card p-5 sm:p-6 space-y-4">
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-base shrink-0">
+                                    <i class="fa-solid fa-cash-register"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-extrabold uppercase tracking-wide"
+                                        id="cashierSectionTitleText">3. Kelola Akun Kasir Sesuai Cabang</h3>
+                                    <p class="text-xs text-slate-300">Nama kasir otomatis tercantum pada bagian "Dibayar
+                                        Oleh" di Nota Pembelian.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="addNewCashierBtn"
+                                    class="px-4 py-2.5 rounded-xl sidebar-link-active font-extrabold text-xs flex items-center gap-2">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    <span>Tambah Akun Kasir</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-4" id="adminCashiersList">
+                            <!-- Diisi oleh JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU BARU: SEMUA KEUANGAN KOMPLIT DI DASHBOARD SUPERADMIN (1 MENU = 1 TAMPILAN) -->
+                <div id="tabFinanceContent" class="hidden space-y-5">
+                    <!-- Header & Filter Periode Keuangan di Superadmin -->
+                    <div class="clay-card p-5 space-y-4">
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shrink-0">
+                                    <i class="fa-solid fa-scale-balanced"></i>
+                                </div>
+                                <div>
+                                    <h3 id="saFinHeaderTitle" class="text-sm font-extrabold uppercase tracking-wide">SISTEM AKUNTANSI &amp;
+                                        LAPORAN KEUANGAN KOMPLIT (SUPERADMIN)</h3>
+                                    <p id="saFinHeaderDesc" class="text-xs text-slate-300">Buku Besar, Neraca, Arus Kas, Biaya (6101–7106),
+                                        Utang Usaha, Penjualan, Jurnal &amp; Tutup Buku Terintegrasi.</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="exportSuperadminFinanceExcel()"
+                                    class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center gap-1.5 transition shadow">
+                                    <i class="fa-solid fa-file-excel"></i>
+                                    <span id="saFinExcelBtnLabel">Download Neraca &amp; Laba Rugi (.xls)</span>
+                                </button>
+                                <button type="button" onclick="exportSuperadminFinancePdf()"
+                                    class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs flex items-center gap-1.5 transition shadow">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    <span id="saFinPdfBtnLabel">Download PDF Neraca &amp; Laba Rugi</span>
+                                </button>
+                                <a href="keuangan_jei.html" target="_blank" id="saFinFullScreenLink"
+                                    class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs flex items-center gap-1.5 transition">
+                                    <i class="fa-solid fa-up-right-from-square"></i>
+                                    <span>Layar Penuh</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Filter Rentang Tanggal / Bulan / Tahun untuk Keuangan di Superadmin -->
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-xs items-end">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Mode
+                                    Periode Keuangan</label>
+                                <select id="saFinPeriodMode"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-extrabold text-slate-800">
+                                    <option value="all">Semua Periode (Akumulasi)</option>
+                                    <option value="date_range">Rentang Tanggal (Dari - Sampai)</option>
+                                    <option value="monthly">Bulanan (Bulan &amp; Tahun)</option>
+                                    <option value="yearly">Tahunan (Pilih Tahun)</option>
+                                </select>
+                            </div>
+                            <div id="saFinStartWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Dari
+                                    Tanggal</label>
+                                <input type="date" id="saFinStartDate"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800">
+                            </div>
+                            <div id="saFinEndWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Sampai
+                                    Tanggal</label>
+                                <input type="date" id="saFinEndDate"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800">
+                            </div>
+                            <div id="saFinMonthWrap" class="hidden">
+                                <label
+                                    class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Bulan</label>
+                                <select id="saFinMonth"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800">
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10" selected>Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                            </div>
+                            <div id="saFinYearWrap" class="hidden">
+                                <label
+                                    class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tahun</label>
+                                <select id="saFinYear"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800">
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Filter
+                                    Cabang Keuangan</label>
+                                <select id="saFinBranchScope"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-extrabold text-slate-800">
+                                    <option value="ALL">Semua Cabang (Konsolidasi)</option>
+                                    <option value="1">Cabang Jakarta</option>
+                                    <option value="2">Cabang Gading Serpong</option>
+                                    <option value="3">Cabang Bekasi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sub-Navigation Tabs untuk 7 Modul Keuangan di dalam Superadmin -->
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <button type="button" onclick="switchSaFinSubTab('neraca')" data-safintab="neraca"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-[#0b132b] text-white font-extrabold text-xs transition">
+                                <i class="fa-solid fa-scale-balanced mr-1"></i> 1. Neraca, Laba Rugi &amp; Arus Kas
+                            </button>
+                            <button type="button" onclick="switchSaFinSubTab('bukubesar')" data-safintab="bukubesar"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition">
+                                <i class="fa-solid fa-layer-group mr-1"></i> 2. Buku Besar (COA)
+                            </button>
+                            <button type="button" onclick="switchSaFinSubTab('jurnal')" data-safintab="jurnal"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition">
+                                <i class="fa-solid fa-book mr-1"></i> 3. Jurnal Umum
+                            </button>
+                            <button type="button" onclick="switchSaFinSubTab('penjualan')" data-safintab="penjualan"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition">
+                                <i class="fa-solid fa-sack-dollar mr-1"></i> 4. Penjualan Emas
+                            </button>
+                            <button type="button" onclick="switchSaFinSubTab('biaya')" data-safintab="biaya"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition">
+                                <i class="fa-solid fa-file-invoice-dollar mr-1"></i> 5. Biaya (6101–7106)
+                            </button>
+                            <button type="button" onclick="switchSaFinSubTab('utang')" data-safintab="utang"
+                                class="sa-fin-subbtn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition">
+                                <i class="fa-solid fa-hand-holding-dollar mr-1"></i> 6. Utang Usaha &amp; Tutup Buku
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 1: NERACA, LABA RUGI (25 AKUN BIAYA 6101-7106) & ARUS KAS -->
+                    <div id="saFinPanel_neraca" class="sa-fin-panel grid grid-cols-1 lg:grid-cols-3 gap-5 text-xs">
+                        <div class="clay-card p-5 space-y-3" id="saFullBalanceSheetBox"></div>
+                        <div class="clay-card p-5 space-y-3" id="saFullIncomeStatementBox"></div>
+                        <div class="clay-card p-5 space-y-3" id="saFullCashFlowBox"></div>
+                    </div>
+
+                    <!-- SUB-PANEL 2: BUKU BESAR (TRIAL BALANCE & MUTASI COA) -->
+                    <div id="saFinPanel_bukubesar" class="sa-fin-panel hidden clay-card p-5 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                            <h4 class="text-sm font-extrabold text-[#0b132b]">Rekapitulasi Buku Besar Seluruh Akun COA
+                                (1101 s/d 7106)</h4>
+                            <span class="text-xs font-bold text-emerald-700">Otomatis Terintegrasi dari Kasir,
+                                Penjualan, Biaya &amp; Utang</span>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-[#0b132b] text-white uppercase text-[10px]">
+                                    <tr>
+                                        <th class="py-3 px-3">Kode</th>
+                                        <th class="py-3 px-3">Nama Akun COA</th>
+                                        <th class="py-3 px-3">Kategori</th>
+                                        <th class="py-3 px-3 text-right">Total Debit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Total Kredit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Saldo Akhir (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saLedgerTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 3: JURNAL UMUM -->
+                    <div id="saFinPanel_jurnal" class="sa-fin-panel hidden clay-card p-5 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 class="text-sm font-extrabold text-[#0b132b]">Daftar Jurnal Umum Terintegrasi</h4>
+                            <div class="flex gap-4 text-xs font-extrabold">
+                                <span class="text-emerald-700">Total Debit: <strong id="saJurnalDebitSum">Rp
+                                        0</strong></span>
+                                <span class="text-blue-700">Total Kredit: <strong id="saJurnalCreditSum">Rp
+                                        0</strong></span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-[#0b132b] text-white uppercase text-[10px]">
+                                    <tr>
+                                        <th class="py-3 px-3">Tanggal</th>
+                                        <th class="py-3 px-3">No. Bukti</th>
+                                        <th class="py-3 px-3">Sumber</th>
+                                        <th class="py-3 px-3">Keterangan &amp; Akun</th>
+                                        <th class="py-3 px-3 text-right">Debit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Kredit (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saJurnalTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 4: PENJUALAN EMAS -->
+                    <div id="saFinPanel_penjualan" class="sa-fin-panel hidden clay-card p-5 space-y-4">
+                        <h4 class="text-sm font-extrabold text-[#0b132b]">Tambah &amp; Kelola Penjualan / Peleburan Emas
+                        </h4>
+                        <form id="saFormAddSale" onsubmit="return false;"
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <input type="date" id="saSaleDate" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="text" id="saSaleInv" placeholder="No. Invoice (INV.SLS.003)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="text" id="saSaleBuyer" placeholder="Nama Buyer / Refinery" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="number" step="0.01" id="saSaleWeight" placeholder="Berat (Gram)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="number" id="saSaleTotal" placeholder="Harga Jual Total (Rp)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <div class="flex gap-1.5">
+                                <input type="number" id="saSaleCogs" placeholder="HPP Pokok (Rp)" required
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                                <button type="submit"
+                                    class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shrink-0">+
+                                    Simpan</button>
+                            </div>
+                        </form>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-[#0b132b] text-white uppercase text-[10px]">
+                                    <tr>
+                                        <th class="py-3 px-3">Tanggal &amp; Invoice</th>
+                                        <th class="py-3 px-3">Buyer</th>
+                                        <th class="py-3 px-3 text-right">Berat (Gram)</th>
+                                        <th class="py-3 px-3 text-right">Harga Jual (Rp)</th>
+                                        <th class="py-3 px-3 text-right">HPP (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Margin Laba (Rp)</th>
+                                        <th class="py-3 px-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saSalesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 5: BIAYA OPERASIONAL & SOSIAL (6101-7106) -->
+                    <div id="saFinPanel_biaya" class="sa-fin-panel hidden clay-card p-5 space-y-4">
+                        <h4 class="text-sm font-extrabold text-[#0b132b]">Tambah &amp; Kelola Biaya Operasional &amp;
+                            Program Sosial (Kode 6101 s/d 7106)</h4>
+                        <form id="saFormAddExpense" onsubmit="return false;"
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <input type="date" id="saExpDate" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="text" id="saExpRef" placeholder="No. Bukti (BKK.2026.005)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <select id="saExpAccountSelect"
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                                <optgroup label="61xx - Beban Operasional">
+                                    <option value="6101">6101 - Beban Gaji</option>
+                                    <option value="6102">6102 - Beban Bonus/Insentif</option>
+                                    <option value="6103">6103 - Beban Sewa</option>
+                                    <option value="6104">6104 - Beban Listrik</option>
+                                    <option value="6105">6105 - Beban Air</option>
+                                    <option value="6106">6106 - Beban Internet</option>
+                                    <option value="6107">6107 - Beban Keamanan</option>
+                                    <option value="6108">6108 - Beban Transportasi</option>
+                                    <option value="6109">6109 - Beban BBM</option>
+                                    <option value="6110">6110 - Beban Promosi &amp; Iklan</option>
+                                    <option value="6111">6111 - Beban ATK</option>
+                                    <option value="6112">6112 - Beban Administrasi</option>
+                                    <option value="6113">6113 - Beban Reparasi &amp; Pemeliharaan</option>
+                                    <option value="6114">6114 - Beban Penyusutan</option>
+                                    <option value="6115">6115 - Beban Asuransi</option>
+                                    <option value="6116">6116 - Beban Kebersihan</option>
+                                    <option value="6117">6117 - Beban Legal &amp; Perizinan</option>
+                                    <option value="6118">6118 - Beban Bank &amp; Administrasi</option>
+                                    <option value="6119">6119 - Beban Lain-lain</option>
+                                </optgroup>
+                                <optgroup label="71xx - Beban Berbagi / Sosial &amp; Program JEI">
+                                    <option value="7101">7101 - Beban Berbagi/Amal</option>
+                                    <option value="7102">7102 - Bantuan Sosial</option>
+                                    <option value="7103">7103 - Santunan Karyawan</option>
+                                    <option value="7104">7104 - Program Masyarakat</option>
+                                    <option value="7105">7105 - Donasi</option>
+                                    <option value="7106">7106 - Program Jantung Emas</option>
+                                </optgroup>
+                            </select>
+                            <select id="saExpBranch"
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                                <option value="1">Cabang Jakarta</option>
+                                <option value="2">Cabang Gading Serpong</option>
+                                <option value="3">Cabang Bekasi</option>
+                            </select>
+                            <input type="number" id="saExpAmount" placeholder="Nominal Biaya (Rp)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <div class="flex gap-1.5">
+                                <input type="text" id="saExpDesc" placeholder="Keterangan biaya..." required
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                                <button type="submit"
+                                    class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shrink-0">+
+                                    Simpan</button>
+                            </div>
+                        </form>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-[#0b132b] text-white uppercase text-[10px]">
+                                    <tr>
+                                        <th class="py-3 px-3">Tanggal &amp; Bukti</th>
+                                        <th class="py-3 px-3">Kode &amp; Kategori Akun Biaya</th>
+                                        <th class="py-3 px-3">Cabang</th>
+                                        <th class="py-3 px-3">Keterangan</th>
+                                        <th class="py-3 px-3 text-right">Nominal (Rp)</th>
+                                        <th class="py-3 px-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saExpensesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 6: UTANG USAHA & TUTUP BUKU -->
+                    <div id="saFinPanel_utang" class="sa-fin-panel hidden clay-card p-5 space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 class="text-sm font-extrabold text-[#0b132b]">Manajemen Utang Usaha &amp; Pelunasan</h4>
+                            <a href="keuangan_jei.html" target="_blank" id="saFinTutupBukuLink"
+                                class="text-xs font-extrabold text-emerald-700 hover:underline">Buka Modul Tutup Buku
+                                Lengkap &rarr;</a>
+                        </div>
+                        <form id="saFormAddPayable" onsubmit="return false;"
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
+                            <input type="date" id="saApDate" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="text" id="saApRef" placeholder="No. Kontrak (AP.2026.002)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="text" id="saApVendor" placeholder="Nama Kreditur / Supplier" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <input type="number" id="saApAmount" placeholder="Nominal Utang (Rp)" required
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                            <div class="flex gap-1.5">
+                                <input type="text" id="saApDesc" placeholder="Keterangan..." required
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold">
+                                <button type="submit"
+                                    class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold shrink-0">+
+                                    Catat</button>
+                            </div>
+                        </form>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-[#0b132b] text-white uppercase text-[10px]">
+                                    <tr>
+                                        <th class="py-3 px-3">Tanggal &amp; Faktur</th>
+                                        <th class="py-3 px-3">Kreditur</th>
+                                        <th class="py-3 px-3">Keterangan</th>
+                                        <th class="py-3 px-3 text-right">Total Utang</th>
+                                        <th class="py-3 px-3 text-right">Dibayar</th>
+                                        <th class="py-3 px-3 text-right">Sisa Utang</th>
+                                        <th class="py-3 px-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="saPayablesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU 6: RIWAYAT TRANSAKSI NOTA KASIR & DOWNLOAD LAPORAN (1 MENU = 1 TAMPILAN) -->
+                <div id="tabTransactionsContent" class="hidden clay-card p-5 sm:p-6 space-y-4">
+                    <div
+                        class="flex flex-wrap items-center justify-between gap-3 bg-[#0b132b] text-white p-4 rounded-2xl">
+                        <div>
+                            <h3 class="text-sm font-extrabold uppercase tracking-wide">Riwayat Nota &amp; Download
+                                Laporan Data Transaksi</h3>
+                            <p class="text-xs text-slate-300" id="reportScopeDesc">Filter Harian, Rentang Tanggal,
+                                Mingguan, atau Bulanan &amp; download / cetak laporan (Excel / PDF).</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="downloadAdminExcelBtn"
+                                class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center gap-1.5 transition shadow">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span>Download Excel (.xls)</span>
+                            </button>
+                            <button type="button" id="downloadAdminPdfBtn"
+                                class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs flex items-center gap-1.5 transition shadow">
+                                <i class="fa-solid fa-print"></i>
+                                <span>Cetak / Download PDF</span>
+                            </button>
+                            <a href="kasir_jei.html" target="_blank"
+                                class="px-3.5 py-2.5 rounded-xl sidebar-link-active font-extrabold text-xs flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Buat Nota Baru</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FILTER BAR: HARIAN / RENTANG TANGGAL / MINGGUAN / BULANAN / CABANG -->
+                    <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end text-xs">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Mode
+                                    Filter Periode</label>
+                                <select id="reportFilterMode"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                                    <option value="all">Semua Periode</option>
+                                    <option value="daily">Harian (Pilih Tanggal)</option>
+                                    <option value="date_range">Rentang Tanggal Dipilih</option>
+                                    <option value="weekly">Mingguan (7 Hari)</option>
+                                    <option value="monthly">Bulanan (Bulan &amp; Tahun)</option>
+                                </select>
+                            </div>
+
+                            <!-- Input Harian -->
+                            <div id="filterDailyDateWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Pilih
+                                    Tanggal Harian</label>
+                                <input type="date" id="reportDailyDate"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <!-- Input Rentang Tanggal / Mingguan -->
+                            <div id="filterStartDateWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Dari
+                                    Tanggal</label>
+                                <input type="date" id="reportStartDate"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                            </div>
+                            <div id="filterEndDateWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Sampai
+                                    Tanggal</label>
+                                <input type="date" id="reportEndDate"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <!-- Input Bulanan (Hidden by default unless monthly is selected) -->
+                            <div id="filterMonthWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Pilih
+                                    Bulan</label>
+                                <select id="reportMonthSelect"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11" selected>November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                            </div>
+                            <div id="filterYearWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Pilih
+                                    Tahun</label>
+                                <select id="reportYearSelect"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Filter
+                                    Cabang</label>
+                                <select id="reportBranchSelect"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none focus:border-blue-600">
+                                    <option value="ALL">Semua Cabang</option>
+                                </select>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="applyReportFilterBtn"
+                                    class="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition">
+                                    <i class="fa-solid fa-filter mr-1"></i> Terapkan
+                                </button>
+                                <button type="button" id="resetReportFilterBtn"
+                                    class="py-2 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-extrabold text-xs transition"
+                                    title="Reset Filter">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Summary Hasil Filter -->
+                        <div
+                            class="pt-3 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+                            <span id="reportFilterSummaryText" class="font-bold text-slate-600">Menampilkan: Semua
+                                Periode</span>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span
+                                    class="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 font-extrabold text-blue-700">Total
+                                    Nota: <span id="reportSumNota">0 Nota</span></span>
+                                <span
+                                    class="px-3 py-1.5 rounded-xl bg-purple-50 border border-purple-200 font-extrabold text-purple-700">Total
+                                    Gram: <span id="reportSumGram">0 gr</span></span>
+                                <span
+                                    class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 font-extrabold text-emerald-700">Total
+                                    Biaya Keluar: <span id="reportSumMoney">Rp 0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-[#0b132b] text-white font-extrabold uppercase text-[10px] tracking-wider">
+                                <tr>
+                                    <th class="py-3.5 px-3">TANGGAL</th>
+                                    <th class="py-3.5 px-3">NO NOTA</th>
+                                    <th class="py-3.5 px-3">NAMA CUSTOMER &amp; CABANG</th>
+                                    <th class="py-3.5 px-3">KADAR &amp; MATERIAL</th>
+                                    <th class="py-3.5 px-3 text-right">BERAT (GR)</th>
+                                    <th class="py-3.5 px-3 text-right">@HARGA</th>
+                                    <th class="py-3.5 px-3 text-right">TOTAL HARGA</th>
+                                    <th class="py-3.5 px-3 text-center">AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200/70" id="adminTransactionsTable">
+                                <!-- Diisi oleh JS -->
+                            </tbody>
+                            <tfoot id="adminTransactionsTableFoot"
+                                class="bg-slate-100 font-extrabold text-slate-800 border-t-2 border-slate-300">
+                                <!-- Diisi oleh JS -->
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- TAB 8: DATA PELANGGAN SELURUH CABANG (CRUD TAMBAH, EDIT, DELETE) -->
+                <!-- ========================================================= -->
+                <div id="tabCustomersContent" class="hidden clay-card p-6 space-y-5">
+                    <div
+                        class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-base shadow-md">
+                                <i class="fa-solid fa-address-book"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-base font-extrabold text-slate-800">Database Pelanggan Seluruh
+                                        Cabang (CRUD)</h2>
+                                    <span
+                                        class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-extrabold text-[10px] uppercase">Superadmin
+                                        &amp; Admin</span>
+                                </div>
+                                <p class="text-xs text-slate-400">Kelola data pelanggan seluruh cabang: Nama Lengkap,
+                                    No. KTP, No. HP, Alamat, serta Point &amp; Jumlah Transaksi.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="addNewCustomerBtn"
+                                class="px-4 py-2.5 rounded-xl bg-[#6351f7] hover:bg-[#523ee8] text-white font-extrabold text-xs flex items-center gap-2 shadow-sm transition">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>+ Tambah Pelanggan</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Bar & Ringkasan KPI Pelanggan -->
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+                            <div class="lg:col-span-2">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cari
+                                    Pelanggan (Nama / No. KTP / No. HP / Alamat)</label>
+                                <div class="relative">
+                                    <i
+                                        class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <input type="text" id="customerSearchInput"
+                                        placeholder="Ketik nama pelanggan, NIK KTP, No HP, atau alamat..."
+                                        class="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#6351f7]">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Filter
+                                    Cabang</label>
+                                <select id="customerBranchFilterSelect"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-800 focus:outline-none focus:border-[#6351f7]">
+                                    <option value="ALL">Semua Cabang (Seluruh Pelanggan)</option>
+                                </select>
+                            </div>
+                            <div class="lg:col-span-2 flex flex-col items-end gap-2">
+                                <!-- Tombol Download Data Pelanggan (Keseluruhan atau Sesuai Cabang Masing-Masing) -->
+                                <div class="flex flex-wrap items-center justify-end gap-1.5">
+                                    <button type="button" id="downloadCustomersAllExcelBtn" onclick="exportCustomersExcel('ALL')"
+                                        class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] flex items-center gap-1.5 shadow-sm transition"
+                                        title="Download Excel Data Pelanggan Keseluruhan (Semua Cabang)">
+                                        <i class="fa-solid fa-file-excel"></i>
+                                        <span>Download Semua Cabang (.xls)</span>
+                                    </button>
+                                    <button type="button" id="downloadCustomersBranchExcelBtn" onclick="exportCustomersExcel('BRANCH')"
+                                        class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-[11px] flex items-center gap-1.5 shadow-sm transition"
+                                        title="Download Excel Data Pelanggan Sesuai Cabang">
+                                        <i class="fa-solid fa-store"></i>
+                                        <span id="custBtnBranchExcelLabel">Download Per Cabang (.xls)</span>
+                                    </button>
+                                    <button type="button" id="downloadCustomersPdfBtn" onclick="exportCustomersPdf('AUTO')"
+                                        class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[11px] flex items-center gap-1.5 shadow-sm transition"
+                                        title="Cetak / Download PDF Data Pelanggan">
+                                        <i class="fa-solid fa-file-pdf"></i>
+                                        <span id="custBtnPdfLabel">PDF / Cetak</span>
+                                    </button>
+                                </div>
+                                <div class="flex flex-wrap items-center justify-end gap-2">
+                                    <span
+                                        class="px-3 py-2 rounded-xl bg-indigo-50 border border-indigo-200 font-extrabold text-indigo-700 text-xs">
+                                        Total Pelanggan: <span id="custSummaryTotalCount">0</span>
+                                    </span>
+                                    <span
+                                        class="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 font-extrabold text-emerald-700 text-xs">
+                                        Total Transaksi: <span id="custSummaryTotalTrx">0x</span>
+                                    </span>
+                                    <span
+                                        class="px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 font-extrabold text-amber-700 text-xs">
+                                        Total Point: <span id="custSummaryTotalPoints">0 Pts</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Data Pelanggan Seluruh Cabang -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-[#0b132b] text-white font-extrabold uppercase text-[10px] tracking-wider">
+                                <tr>
+                                    <th class="py-3.5 px-3 text-center w-10">NO</th>
+                                    <th class="py-3.5 px-3">NAMA LENGKAP &amp; CABANG</th>
+                                    <th class="py-3.5 px-3">NO. KTP (NIK)</th>
+                                    <th class="py-3.5 px-3">NO. HP &amp; REKENING BANK</th>
+                                    <th class="py-3.5 px-3">ALAMAT LENGKAP</th>
+                                    <th class="py-3.5 px-3 text-center">JUMLAH TRANSAKSI</th>
+                                    <th class="py-3.5 px-3 text-center">POINT PELANGGAN</th>
+                                    <th class="py-3.5 px-3 text-center">AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200/70" id="adminCustomersTableBody">
+                                <!-- Diisi oleh JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER BAR (Persis "Data is updated as of... | Source: ...") -->
+            <footer class="pt-5 mt-4 border-t border-slate-200/80 text-center text-[11px] font-semibold text-slate-400">
+                Data diperbarui pada: <span id="footerLastUpdatedText" class="text-slate-600 font-bold">Hari ini</span>
+                &nbsp;|&nbsp; Sumber: Sistem Manajemen Jantung Emas Indonesia © 2026
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- MODAL EDIT / TAMBAH DATA PELANGGAN (SUPERADMIN & ADMIN) -->
+    <div id="customerModal"
+        class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8 space-y-5 relative overflow-y-auto max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm shadow">
+                        <i class="fa-solid fa-address-book"></i>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800" id="customerModalTitle">Tambah Data Pelanggan
+                    </h3>
+                </div>
+                <button type="button" id="closeCustomerModalBtn"
+                    class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="customerForm" onsubmit="event.preventDefault();" class="space-y-4">
+                <input type="hidden" id="customerEditId" value="">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap Pelanggan <span
+                            class="text-rose-500">*</span></label>
+                    <input type="text" id="customerNameInput" placeholder="Contoh: KEVIN RAFIF FELIATRA" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 uppercase font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">No. KTP / NIK <span
+                                class="text-rose-500">*</span></label>
+                        <input type="text" id="customerKtpInput" placeholder="Contoh: 1471091307970021" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">No. HP / WhatsApp <span
+                                class="text-rose-500">*</span></label>
+                        <input type="text" id="customerPhoneInput" placeholder="Contoh: 082122126634" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Cabang Terdaftar</label>
+                    <select id="customerOutletSelect"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white"></select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Alamat Lengkap <span
+                            class="text-rose-500">*</span></label>
+                    <textarea id="customerAddressInput" rows="2"
+                        placeholder="Masukkan alamat lengkap sesuai KTP / domisili..." required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-medium focus:outline-none focus:border-[#6351f7] focus:bg-white"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Nama Bank (Opsional)</label>
+                        <input type="text" id="customerBankNameInput" placeholder="Contoh: BCA / MANDIRI / BRI"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 uppercase font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">No. Rekening (Opsional)</label>
+                        <input type="text" id="customerBankRekInput" placeholder="Contoh: 8830918273"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Jumlah Transaksi (Kali)</label>
+                        <input type="number" id="customerTrxCountInput" min="0" value="1" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-extrabold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Point Loyalitas Pelanggan</label>
+                        <input type="number" id="customerPointsInput" min="0" value="1" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-amber-600 font-extrabold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" id="saveCustomerBtn"
+                        class="w-full py-3.5 px-6 rounded-xl btn-3d-purple font-extrabold text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Data Pelanggan</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / TAMBAH AKUN ADMIN CABANG (KHUSUS SUPERADMIN) -->
+    <div id="branchAdminModal"
+        class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8 space-y-5 relative overflow-y-auto max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800" id="branchAdminModalTitle">Tambah Akun Admin
+                        Cabang</h3>
+                </div>
+                <button id="closeBranchAdminModalBtn"
+                    class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="event.preventDefault();" class="space-y-4">
+                <input type="hidden" id="branchAdminEditId" value="">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Lengkap Admin Cabang</label>
+                    <input type="text" id="branchAdminNameInput" placeholder="Contoh: BUDI SANTOSO (ADMIN JKT)" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 uppercase font-bold focus:outline-none focus:border-indigo-600 focus:bg-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Username Login</label>
+                        <input type="text" id="branchAdminUsernameInput" placeholder="Contoh: admin_jkt" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-indigo-600 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PIN / Password</label>
+                        <input type="text" id="branchAdminPinInput" placeholder="Contoh: 1234" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-indigo-600 focus:bg-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Pilih Cabang yang Dikelola (Hanya Bisa
+                        CRUD Cabang Ini)</label>
+                    <select id="branchAdminOutletSelect" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:border-indigo-600 focus:bg-white"></select>
+                </div>
+                <div class="pt-2">
+                    <button type="button" id="saveBranchAdminBtn"
+                        class="w-full py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Akun Admin Cabang</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / TAMBAH AKUN KEUANGAN (KHUSUS SUPERADMIN) -->
+    <div id="financeUserModal"
+        class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8 space-y-5 relative overflow-y-auto max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800" id="financeUserModalTitle">Tambah Akun Staf
+                        Keuangan</h3>
+                </div>
+                <button id="closeFinanceUserModalBtn"
+                    class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="event.preventDefault();" class="space-y-4">
+                <input type="hidden" id="financeUserEditId" value="">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Staf Keuangan / Akuntan</label>
+                    <input type="text" id="financeUserNameInput" placeholder="Contoh: SITI RAHMA (KEUANGAN PUSAT)"
+                        required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 uppercase font-bold focus:outline-none focus:border-emerald-600 focus:bg-white">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Username Login</label>
+                        <input type="text" id="financeUserUsernameInput" placeholder="Contoh: fin_pusat" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-emerald-600 focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">PIN / Password</label>
+                        <input type="text" id="financeUserPinInput" placeholder="Contoh: 1234" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-emerald-600 focus:bg-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Wewenang Cakupan Keuangan</label>
+                    <select id="financeUserScopeSelect" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:border-emerald-600 focus:bg-white">
+                        <option value="HEAD_FINANCE">Keuangan Pusat (Konsolidasi Semua Cabang)</option>
+                        <option value="FIN_BRANCH_1">Keuangan Cabang Jakarta</option>
+                        <option value="FIN_BRANCH_2">Keuangan Cabang Tangerang &amp; Gading Serpong</option>
+                        <option value="FIN_BRANCH_3">Keuangan Cabang Bekasi &amp; Depok</option>
+                    </select>
+                </div>
+                <div class="pt-2">
+                    <button type="button" id="saveFinanceUserBtn"
+                        class="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Akun Keuangan</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / TAMBAH KASIR -->
+    <div id="cashierModal"
+        class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8 space-y-5 relative overflow-y-auto max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl icon-3d-purple text-white flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800" id="cashierModalTitle">Tambah Akun Kasir Baru
+                    </h3>
+                </div>
+                <button id="closeCashierModalBtn"
+                    class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="cashierForm" class="space-y-4" onsubmit="event.preventDefault();">
+                <input type="hidden" id="cashierEditId" value="">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Kasir (Tampil di "Dibayar Oleh" pada
+                        Nota)</label>
+                    <input type="text" id="cashierNameInput" placeholder="Contoh: FAKAR" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 uppercase font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Username Login</label>
+                        <input type="text" id="cashierUsernameInput" placeholder="Contoh: fakar" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Password / PIN Login</label>
+                        <input type="text" id="cashierPinInput" placeholder="Contoh: 1234" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-mono focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Pilih Cabang / Outlet</label>
+                        <select id="cashierOutletSelect" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Kode Nota</label>
+                        <input type="text" id="cashierBranchCodeInput" placeholder="GS / JKT" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-800 uppercase font-mono font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                    *Kode Nota digunakan untuk nomor otomatis, misal <code class="text-[#6351f7] font-bold">GS</code>
+                    menghasilkan <code class="text-[#6351f7] font-bold">JEI.GS.20260920209</code>.
+                </p>
+
+                <div class="pt-2">
+                    <button type="button" id="saveCashierBtn"
+                        class="w-full py-3.5 px-6 rounded-xl btn-3d-purple font-extrabold text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Akun Kasir</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT / TAMBAH OUTLET -->
+    <div id="outletModal"
+        class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="clay-card max-w-lg w-full p-6 sm:p-8 space-y-5 relative overflow-y-auto max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl icon-3d-mint text-white flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-800" id="outletModalTitle">Tambah Cabang Baru</h3>
+                </div>
+                <button id="closeOutletModalBtn"
+                    class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="outletForm" class="space-y-4" onsubmit="event.preventDefault();">
+                <input type="hidden" id="outletEditId" value="">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Nama Outlet / Cabang</label>
+                    <input type="text" id="outletNameInput" placeholder="Contoh: Outlet Jakarta Pusat" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 font-bold focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Tagline / Subtitle</label>
+                    <input type="text" id="outletTaglineInput" placeholder="Contoh: Store Utama Jantung Emas"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Alamat Lengkap</label>
+                    <textarea id="outletAddressInput" rows="3" placeholder="Masukkan alamat lengkap cabang..." required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#6351f7] focus:bg-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Link Google Maps (URL)</label>
+                    <input type="url" id="outletMapInput" placeholder="https://maps.google.com/..." required
+                        class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">No. WhatsApp</label>
+                        <input type="text" id="outletWaInput" placeholder="6282122126634" required
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Jam Operasional</label>
+                        <input type="text" id="outletHoursInput" placeholder="08.00 - 21.00 WIB"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#6351f7] focus:bg-white">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="button" id="saveOutletBtn"
+                        class="w-full py-3.5 px-6 rounded-xl btn-3d-purple font-extrabold text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Data Cabang</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL GENERATOR BROSUR HARGA (HD / FHD A4 PORTRAIT & LANDSCAPE + LIVE PREVIEW) -->
+    <div id="brochureGeneratorModal"
+        class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+        <div
+            class="bg-white rounded-3xl max-w-6xl w-full p-4 sm:p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[95vh] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-600 text-slate-950 flex items-center justify-center text-lg font-black shadow-md">
+                        <i class="fa-solid fa-file-image"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight">
+                                Generator Brosur Harga Emas (HD / FHD A4)</h3>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-extrabold uppercase">Live
+                                Data 20 Kadar</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Preview real-time menggunakan harga tabel live sebelum
+                            di-download dalam resolusi tinggi (HD / FHD Ukuran A4).</p>
+                    </div>
+                </div>
+                <button type="button" id="closeBrochureGeneratorModalBtn"
+                    class="w-9 h-9 rounded-xl bg-slate-100 text-slate-600 hover:bg-rose-100 hover:text-rose-600 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body: Left Controls + Right Live Preview -->
+            <div class="grid lg:grid-cols-12 gap-5 pt-4 overflow-y-auto flex-1 pr-1">
+                <!-- Left Column: Pengaturan Brosur & Upload Background -->
+                <div class="lg:col-span-5 space-y-4">
+                    <!-- 1. Pilih Orientasi Cetak (Ukuran A4) -->
+                    <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 space-y-3">
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                            <i class="fa-solid fa-compass-drafting text-amber-600 mr-1"></i> 1. Pilih Orientasi Cetak
+                            (Ukuran A4)
+                        </label>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button type="button" id="brochureOrientPortraitBtn"
+                                class="py-3 px-3 rounded-xl border-2 border-amber-500 bg-amber-50/80 text-slate-900 font-extrabold text-xs flex flex-col items-center justify-center gap-1 transition shadow-sm">
+                                <i class="fa-solid fa-file-portrait text-lg text-amber-600"></i>
+                                <span>Portrait (Tegak)</span>
+                                <span class="text-[10px] font-semibold text-slate-500">A4 Standar Brosur</span>
+                            </button>
+                            <button type="button" id="brochureOrientLandscapeBtn"
+                                class="py-3 px-3 rounded-xl border-2 border-slate-200 bg-white hover:border-amber-400 text-slate-700 font-extrabold text-xs flex flex-col items-center justify-center gap-1 transition">
+                                <i class="fa-solid fa-tv text-lg text-slate-500"></i>
+                                <span>Landscape (Mendatar)</span>
+                                <span class="text-[10px] font-semibold text-slate-500">A4 Layar / Display</span>
+                            </button>
+                        </div>
+
+                        <!-- Pilih Kualitas Resolusi HD / FHD -->
+                        <div class="pt-2">
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Kualitas Resolusi Output (HD
+                                / FHD):</label>
+                            <select id="brochureQualitySelect"
+                                class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-extrabold text-slate-800 focus:outline-none focus:border-amber-500">
+                                <option value="FHD">Ultra FHD A4 Cetak Tajam (2480 × 3508 px • 300 DPI)</option>
+                                <option value="HD">HD A4 Standar Digital (1654 × 2339 px • 200 DPI)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 2. Upload Background Brosur HD (Khusus Superadmin) -->
+                    <div id="brochureSuperadminBgBox"
+                        class="bg-amber-50/60 border border-amber-200 rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between gap-2">
+                            <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-800">
+                                <i class="fa-solid fa-cloud-arrow-up text-amber-600 mr-1"></i> 2. Background Brosur HD
+                                (.JPG / .PNG)
+                            </label>
+                            <span id="brochureBgRoleBadge"
+                                class="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] uppercase">Superadmin</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Upload template background brosur resolusi tinggi (<code class="font-bold">.jpg</code> /
+                            <code class="font-bold">.png</code>). Otomatis tersimpan &amp; langsung tampil di review.
+                        </p>
+
+                        <div id="brochureBgUploadControls" class="space-y-2.5">
+                            <label
+                                class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-amber-50 border-2 border-dashed border-amber-400 text-slate-800 font-extrabold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow-sm">
+                                <i class="fa-solid fa-upload text-amber-600"></i>
+                                <span>Pilih File Background HD (.jpg / .png)</span>
+                                <input type="file" id="brochureBgFileInput" accept="image/jpeg,image/png,image/webp"
+                                    class="hidden">
+                            </label>
+                            <div class="flex items-center justify-between gap-2">
+                                <span id="brochureBgStatusText" class="text-[11px] font-bold text-emerald-700 truncate">
+                                    <i class="fa-solid fa-circle-check mr-1"></i>Background Default JEI Aktif
+                                </span>
+                                <button type="button" id="resetBrochureBgBtn"
+                                    class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-rose-400 text-slate-600 hover:text-rose-600 font-bold text-[11px] transition shrink-0">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i>Reset Default
+                                </button>
+                            </div>
+                        </div>
+                        <div id="brochureBgLockedNotice"
+                            class="hidden text-[11px] font-bold text-amber-800 bg-amber-100/80 rounded-xl p-2.5">
+                            <i class="fa-solid fa-lock mr-1"></i> Hanya <strong>Superadmin</strong> yang dapat mengganti
+                            gambar background brosur.
+                        </div>
+                    </div>
+
+                    <!-- 3. Kustomisasi Tanggal & Teks Brosur -->
+                    <div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 space-y-3">
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                            <i class="fa-solid fa-calendar-day text-amber-600 mr-1"></i> 3. Tanggal &amp; Judul pada
+                            Brosur
+                        </label>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Teks Tanggal (Pojok Kanan
+                                Atas Tabel):</label>
+                            <input type="text" id="brochureDateTextInput"
+                                class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-amber-500"
+                                placeholder="Contoh: Selasa, 10 November 2026">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul Baris 1:</label>
+                                <input type="text" id="brochureTitleLine1Input" value="KAMI BAYAR EMAS ANDA"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul Baris 2:</label>
+                                <input type="text" id="brochureTitleLine2Input" value="DENGAN HARGA TERBAIK"
+                                    class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-amber-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1">Kutipan Bawah (Amal &amp;
+                                Sosial):</label>
+                            <input type="text" id="brochureFooterQuoteInput"
+                                value='"Setiap transaksi emas Anda, Kami sisihkan untuk kegiatan amal dan sosial"'
+                                class="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-amber-500">
+                        </div>
+                    </div>
+
+                    <!-- 4. Tombol Download HD/FHD & Cetak A4 -->
+                    <div class="space-y-2.5 pt-1">
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button type="button" id="downloadBrochureJpgBtn"
+                                class="py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Download JPG (HD)</span>
+                            </button>
+                            <button type="button" id="downloadBrochurePngBtn"
+                                class="py-3.5 px-4 rounded-xl bg-[#0b132b] hover:bg-slate-800 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
+                                <i class="fa-solid fa-file-image text-amber-400"></i>
+                                <span>Download PNG (FHD)</span>
+                            </button>
+                        </div>
+                        <button type="button" id="printBrochureA4Btn"
+                            class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition cursor-pointer">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Cetak / Simpan PDF Ukuran A4</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Review / Preview Sebelum Download -->
+                <div class="lg:col-span-7 flex flex-col bg-slate-900 rounded-2xl p-4 border border-slate-800">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span class="text-xs font-extrabold text-white uppercase tracking-wider">Review Brosur
+                                Sebelum Download (Live Preview)</span>
+                        </div>
+                        <span id="brochureResolutionBadge"
+                            class="px-2.5 py-1 rounded-lg bg-slate-800 text-amber-400 font-mono text-[11px] font-bold">
+                            A4 Portrait • 2480 × 3508 px (FHD)
+                        </span>
+                    </div>
+
+                    <div
+                        class="flex-1 flex items-center justify-center overflow-auto bg-slate-950/90 rounded-xl p-3 sm:p-5 min-h-[420px] max-h-[68vh]">
+                        <canvas id="brochurePreviewCanvas"
+                            class="max-w-full max-h-[62vh] w-auto h-auto rounded-lg shadow-2xl border border-amber-500/30"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/js/brosur_bg_default.js"></script>
+    <!-- Admin Logic Script -->
+    <script src="../src/js/jei-core.js"></script>
+    <script src="../src/js/admin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "jei",
+  "version": "1.0.0",
+  "description": "Aplikasi Website, Admin, Kasir & Keuangan Jantung Emas Indonesia (SQLite ACID + AES-256-GCM Security)",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "open": "node server.js --open",
+    "admin": "node server.js --open=admin_jei.html",
+    "kasir": "node server.js --open=kasir_jei.html",
+    "keuangan": "node server.js --open=keuangan_jei.html",
+    "db:status": "node -e \"console.log(JSON.stringify(require('./src/database/db').getDatabaseStats(), null, 2))\"",
+    "db:backup": "node -e \"console.log('Backup tersimpan di:', require('./src/database/db').createDatabaseBackup())\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jantung-emas-indonesia",
+    "jei",
+    "buyback-emas"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

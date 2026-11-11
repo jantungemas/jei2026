@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Keuangan & Akuntansi - Jantung Emas Indonesia</title>
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../src/css/keuangan.css">
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- LOGIN SECTION ROLE KEUANGAN -->
+    <section id="financeLoginSection" class="my-auto max-w-md w-full mx-auto bg-white rounded-3xl p-8 space-y-6 shadow-2xl border border-slate-100">
+        <div class="text-center space-y-2">
+            <div class="w-16 h-16 rounded-2xl kpi-card-green flex items-center justify-center mx-auto text-white text-2xl mb-3">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">
+                <img src="assets/logo.png" alt="Logo" class="w-4 h-4 object-contain">
+                <span>Jantung Emas Indonesia</span>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900">Portal Role Keuangan</h1>
+            <p class="text-xs text-slate-500">Sistem Akuntansi Terintegrasi: Jurnal, Buku Besar, Penjualan, Biaya, Utang Usaha, Arus Kas, Neraca &amp; Tutup Buku.</p>
+        </div>
+
+        <form id="finLoginForm" onsubmit="return false;" class="space-y-4" autocomplete="off">
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5">User ID / Username Keuangan</label>
+                <input type="text" id="finLoginUsernameInput" placeholder="Masukkan User ID / Username..." autocomplete="off" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-sm font-semibold focus:outline-none focus:border-emerald-600 focus:bg-white transition">
+                <select id="finLoginRoleSelect" class="hidden">
+                    <option value="HEAD_FINANCE">Keuangan Pusat</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1.5">PIN / Password</label>
+                <input type="password" id="finLoginPinInput" value="" placeholder="Masukkan PIN / Password..." autocomplete="new-password" required class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-sm font-semibold focus:outline-none focus:border-emerald-600 focus:bg-white transition">
+            </div>
+            <p id="finLoginErrorMsg" class="text-xs text-rose-500 text-center hidden font-semibold">User ID atau PIN/Password tidak sesuai! Silakan hubungi Admin.</p>
+            <button type="submit" id="finSubmitLoginBtn" class="w-full py-3.5 px-6 rounded-xl sidebar-link-active font-extrabold text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-unlock-keyhole"></i>
+                <span>Masuk ke Sistem Keuangan</span>
+            </button>
+        </form>
+
+        <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+            <a href="index.html" class="hover:text-emerald-600 font-bold flex items-center gap-1"><i class="fa-solid fa-globe"></i> Website</a>
+            <a href="admin_jei.html" class="hover:text-blue-600 font-bold flex items-center gap-1 text-blue-600"><i class="fa-solid fa-user-shield"></i> Portal Admin</a>
+            <a href="kasir_jei.html" class="hover:text-purple-600 font-bold flex items-center gap-1 text-purple-600"><i class="fa-solid fa-cash-register"></i> Role Kasir</a>
+        </div>
+    </section>
+
+    <!-- MAIN WORKSPACE KEUANGAN (1 Menu = 1 Tampilan) -->
+    <section id="financeDashboardSection" class="hidden w-full min-h-screen flex flex-col lg:flex-row items-stretch p-0 lg:p-3 lg:pl-0">
+
+        <!-- LEFT DARK NAVY SIDEBAR -->
+        <aside class="navy-sidebar w-full lg:w-[255px] shrink-0 px-4 py-6 flex flex-col justify-between text-white">
+            <div class="space-y-6">
+                <!-- Brand Header -->
+                <div class="flex items-center gap-3 px-2">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white text-lg shrink-0">
+                        <img src="assets/logo.png" alt="JEI" class="w-7 h-7 object-contain">
+                    </div>
+                    <div class="overflow-hidden">
+                        <span class="font-extrabold text-sm text-white tracking-wider uppercase block leading-tight">FINANCE &amp; ACC</span>
+                        <span class="text-xs font-extrabold text-emerald-400 uppercase tracking-wider block">JANTUNG EMAS</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu (9 Modul Akuntansi Terintegrasi: 1 Menu = 1 Tampilan) -->
+                <nav class="space-y-1">
+                    <button type="button" data-fintab="overview" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-active">
+                        <i class="fa-solid fa-chart-pie w-5 text-center text-sm"></i>
+                        <span>Overview Keuangan</span>
+                    </button>
+
+                    <button type="button" data-fintab="jurnal" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-book w-5 text-center text-sm"></i>
+                        <span>Jurnal Umum</span>
+                    </button>
+
+                    <button type="button" data-fintab="bukubesar" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-layer-group w-5 text-center text-sm"></i>
+                        <span>Buku Besar (Ledger)</span>
+                    </button>
+
+                    <button type="button" data-fintab="inventaris" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-boxes-stacked w-5 text-center text-sm"></i>
+                        <span>Inventory / Inventaris</span>
+                    </button>
+
+                    <button type="button" data-fintab="penjualan" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-sack-dollar w-5 text-center text-sm"></i>
+                        <span>Penjualan Emas</span>
+                    </button>
+
+                    <button type="button" data-fintab="piutang" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-file-signature w-5 text-center text-sm"></i>
+                        <span>Piutang Usaha</span>
+                    </button>
+
+                    <button type="button" data-fintab="biaya" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-wallet w-5 text-center text-sm"></i>
+                        <span>Kas Kecil</span>
+                    </button>
+
+                    <button type="button" data-fintab="utang" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-hand-holding-dollar w-5 text-center text-sm"></i>
+                        <span>Utang Usaha</span>
+                    </button>
+
+                    <button type="button" data-fintab="aruskas" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-money-bill-transfer w-5 text-center text-sm"></i>
+                        <span>Arus Kas (Cash Flow)</span>
+                    </button>
+
+                    <button type="button" data-fintab="neraca" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-scale-balanced w-5 text-center text-sm"></i>
+                        <span>Neraca &amp; Laba Rugi</span>
+                    </button>
+
+                    <button type="button" data-fintab="penyesuaian" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-sliders w-5 text-center text-sm"></i>
+                        <span>Jurnal Penyesuaian</span>
+                    </button>
+
+                    <button type="button" data-fintab="tutupbuku" class="fin-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition sidebar-link-inactive">
+                        <i class="fa-solid fa-lock w-5 text-center text-sm"></i>
+                        <span>Tutup Buku Periode</span>
+                    </button>
+
+                    <div class="pt-2 mt-2 border-t border-white/10 space-y-1">
+                        <a href="admin_jei.html" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs transition sidebar-link-inactive text-sky-300">
+                            <i class="fa-solid fa-user-shield w-5 text-center text-sm"></i>
+                            <span>Portal Admin &amp; Superadmin</span>
+                        </a>
+                        <a href="kasir_jei.html" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs transition sidebar-link-inactive text-amber-300">
+                            <i class="fa-solid fa-cash-register w-5 text-center text-sm"></i>
+                            <span>Portal Kasir Cabang</span>
+                        </a>
+                        <a href="index.html" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs transition sidebar-link-inactive">
+                            <i class="fa-solid fa-globe w-5 text-center text-sm"></i>
+                            <span>Website Utama</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Status Integrasi Box -->
+            <div class="mt-6 rounded-2xl bg-[#131d3b] border border-white/10 p-3.5 text-center space-y-1.5">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold">
+                    <i class="fa-solid fa-rotate"></i> REAL-TIME INTEGRATED
+                </span>
+                <p class="text-[11px] text-slate-300 leading-relaxed">
+                    Nota Pembelian Kasir otomatis terjurnal ke Persediaan Emas, Buku Besar, Arus Kas &amp; Neraca.
+                </p>
+            </div>
+        </aside>
+
+        <!-- RIGHT WHITE ROUNDED BOARD -->
+        <div class="main-board flex-1 flex flex-col justify-between p-5 sm:p-7 lg:p-8 overflow-x-hidden">
+            <div class="space-y-6">
+
+                <!-- TOP HEADER BAR -->
+                <header class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h1 class="text-xl sm:text-2xl font-extrabold text-[#0b132b] tracking-tight uppercase" id="finActiveMenuTitle">OVERVIEW KEUANGAN</h1>
+                            <span id="finRoleBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-black uppercase">
+                                <i class="fa-solid fa-building-columns"></i> KEUANGAN PUSAT (KONSOLIDASI)
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5" id="finActiveMenuDesc">Ringkasan posisi keuangan terintegrasi seluruh modul akuntansi Jantung Emas Indonesia.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <!-- Switcher Cabang / Role Keuangan -->
+                        <div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 shadow-sm">
+                            <i class="fa-solid fa-filter text-emerald-600 text-xs"></i>
+                            <span class="text-[10px] font-extrabold uppercase text-slate-400">Unit:</span>
+                            <select id="finBranchScopeSelect" class="bg-transparent text-xs font-extrabold text-slate-800 focus:outline-none cursor-pointer">
+                                <option value="ALL">Semua Cabang (Konsolidasi)</option>
+                                <option value="1">Cabang: Jakarta</option>
+                                <option value="2">Cabang: Gading Serpong</option>
+                                <option value="3">Cabang: Bekasi</option>
+                            </select>
+                        </div>
+
+                        <a href="admin_jei.html" class="px-3 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-extrabold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-shield"></i> Admin
+                        </a>
+                        <a href="kasir_jei.html" class="px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-extrabold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-cash-register"></i> Kasir
+                        </a>
+                    </div>
+                </header>
+
+                <!-- GLOBAL FILTER PERIODE & DOWNLOAD LAPORAN (PDF & EXCEL) -->
+                <div class="clean-card p-4 bg-gradient-to-r from-slate-50 via-white to-emerald-50/40 border border-slate-200/90">
+                    <div class="flex flex-col xl:flex-row xl:items-end justify-between gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 flex-1">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Filter Periode Laporan</label>
+                                <select id="finPeriodModeSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-800 focus:outline-none focus:border-emerald-600">
+                                    <option value="all">Semua Periode (Akumulasi)</option>
+                                    <option value="date_range">Rentang Tanggal (Dari - Sampai)</option>
+                                    <option value="monthly">Bulanan (Pilih Bulan &amp; Tahun)</option>
+                                    <option value="yearly">Tahunan (Pilih Tahun)</option>
+                                </select>
+                            </div>
+
+                            <!-- Input Rentang Tanggal -->
+                            <div id="finStartDateWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Dari Tanggal</label>
+                                <input type="date" id="finStartDateInput" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600">
+                            </div>
+                            <div id="finEndDateWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Sampai Tanggal</label>
+                                <input type="date" id="finEndDateInput" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600">
+                            </div>
+
+                            <!-- Input Bulan -->
+                            <div id="finMonthWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Pilih Bulan</label>
+                                <select id="finMonthSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600">
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10" selected>Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                            </div>
+
+                            <!-- Input Tahun -->
+                            <div id="finYearWrap" class="hidden">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Pilih Tahun</label>
+                                <select id="finYearSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600">
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cakupan Export File</label>
+                                <select id="finExportTypeSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold text-emerald-700 focus:outline-none focus:border-emerald-600">
+                                    <option value="ACTIVE_TAB" selected>Laporan Menu Aktif Saat Ini</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <button type="button" id="finDownloadExcelBtn" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center gap-2 shadow-sm transition">
+                                <i class="fa-solid fa-file-excel"></i> Download Excel (.xls)
+                            </button>
+                            <button type="button" id="finDownloadPdfBtn" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs flex items-center gap-2 shadow-sm transition">
+                                <i class="fa-solid fa-file-pdf"></i> Download PDF / Cetak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 KARTU KPI UTAMA KEUANGAN (Tampil di semua menu kecuali Kas Kecil) -->
+                <div id="mainFinKpiGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="kpi-card-blue rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                            <i class="fa-solid fa-vault"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-semibold text-blue-100 leading-snug">Saldo Kas &amp; Bank Aktif</p>
+                            <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiFinCashVal">Rp&nbsp;0</h3>
+                            <p class="text-[10px] text-blue-100/90 leading-snug" id="kpiFinCashSub">Modal + Penjualan - Pengeluaran</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-orange rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-semibold text-orange-100 leading-snug">Persediaan Emas (Stok)</p>
+                            <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiFinInventoryVal">Rp&nbsp;0</h3>
+                            <p class="text-[10px] text-orange-100/90 leading-snug" id="kpiFinInventorySub">0 Gram Stok Emas</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-green rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-semibold text-emerald-100 leading-snug">Total Penjualan Emas</p>
+                            <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiFinSalesVal">Rp&nbsp;0</h3>
+                            <p class="text-[10px] text-emerald-100/90 leading-snug" id="kpiFinSalesSub">Pendapatan Peleburan / Buyer</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-purple rounded-2xl p-3.5 sm:p-4 text-white flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-base shrink-0">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-semibold text-purple-100 leading-snug">Laba Bersih (Net Profit)</p>
+                            <h3 class="text-[15px] sm:text-base xl:text-[17px] font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiFinNetProfitVal">Rp&nbsp;0</h3>
+                            <p class="text-[10px] text-purple-100/90 leading-snug" id="kpiFinNetProfitSub">Utang Usaha: Rp&nbsp;0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 KARTU KPI KHUSUS MENU KAS KECIL TERPISAH (Hanya Menampilkan Saldo Kas & Total Pengeluaran) -->
+                <div id="pettyCashKpiGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="kpi-card-blue rounded-2xl p-4 text-white flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs font-semibold text-blue-100 leading-snug">Saldo Kas Kecil</p>
+                            <h3 class="text-lg sm:text-xl font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiPettyCashBalanceVal">Rp&nbsp;0</h3>
+                            <p class="text-[11px] text-blue-100/90 leading-snug" id="kpiPettyCashBalanceSub">Saldo Awal: Rp 0 | Pemasukan: Rp 0</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card-orange rounded-2xl p-4 text-white flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-full bg-white/20 flex items-center justify-center text-lg shrink-0">
+                            <i class="fa-solid fa-arrow-trend-down"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs font-semibold text-orange-100 leading-snug">Total Pengeluaran</p>
+                            <h3 class="text-lg sm:text-xl font-extrabold tracking-tight leading-snug whitespace-nowrap my-0.5" id="kpiPettyCashExpenseVal">Rp&nbsp;0</h3>
+                            <p class="text-[11px] text-orange-100/90 leading-snug" id="kpiPettyCashExpenseSub">Total Pengeluaran Biaya Kebutuhan Harian Kas Kecil</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 1: OVERVIEW KEUANGAN (1 Menu = 1 Tampilan) -->
+                <!-- ========================================================= -->
+                <div id="finTab_overview" class="fin-tab-panel space-y-5">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                        <!-- Posisi Kas & Pembelian Kasir -->
+                        <div class="clean-card p-5 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#0b132b]">1. Siklus Pembelian &amp; Penjualan Emas</h3>
+                                <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-extrabold">Real-Time</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Pembelian Emas (Nota Kasir):</span>
+                                    <span class="font-extrabold text-slate-800" id="ovPurchaseVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Berat Dibeli (Kasir):</span>
+                                    <span class="font-extrabold text-purple-700" id="ovPurchaseGram">0 Gram</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Penjualan / Peleburan Emas:</span>
+                                    <span class="font-extrabold text-emerald-600" id="ovSalesVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">HPP Emas Terjual:</span>
+                                    <span class="font-extrabold text-rose-600" id="ovCogsVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between pt-1">
+                                    <span class="font-extrabold text-slate-700">Laba Kotor Penjualan:</span>
+                                    <span class="font-black text-emerald-700" id="ovGrossProfitVal">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Biaya & Utang Usaha -->
+                        <div class="clean-card p-5 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#0b132b]">2. Biaya Operasional &amp; Kewajiban</h3>
+                                <span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[10px] font-extrabold">Terintegrasi</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Biaya Operasional:</span>
+                                    <span class="font-extrabold text-rose-600" id="ovExpensesVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Utang Usaha Baru:</span>
+                                    <span class="font-extrabold text-slate-800" id="ovPayablesTotalVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Utang Usaha Telah Dibayar:</span>
+                                    <span class="font-extrabold text-emerald-600" id="ovPayablesPaidVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Sisa Saldo Utang Usaha:</span>
+                                    <span class="font-extrabold text-amber-600" id="ovPayablesRemVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between pt-1">
+                                    <span class="font-extrabold text-slate-700">Laba Bersih Operasional:</span>
+                                    <span class="font-black text-indigo-700" id="ovNetIncomeVal">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keseimbangan Neraca -->
+                        <div class="clean-card p-5 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#0b132b]">3. Posisi Neraca (Balance Sheet)</h3>
+                                <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-extrabold" id="ovBalanceStatusBadge">SEIMBANG</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Aktiva (Aset):</span>
+                                    <span class="font-extrabold text-blue-700" id="ovTotalAssetsVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Kewajiban (Utang):</span>
+                                    <span class="font-extrabold text-amber-600" id="ovTotalLiabVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Modal &amp; Laba Ditahan:</span>
+                                    <span class="font-extrabold text-purple-700" id="ovTotalEquityVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                    <span class="text-slate-500">Total Pasiva (Utang + Ekuitas):</span>
+                                    <span class="font-extrabold text-emerald-700" id="ovTotalPasivaVal">Rp 0</span>
+                                </div>
+                                <div class="flex justify-between pt-1">
+                                    <span class="font-extrabold text-slate-700">Periode Tutup Buku:</span>
+                                    <span class="font-black text-slate-800" id="ovClosedCountVal">0 Periode</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pengaturan Cepat Setoran Modal Awal Kas Sesuai Keinginan -->
+                    <div class="clean-card p-5 border-l-4 border-l-blue-600 bg-gradient-to-r from-blue-50/50 to-white space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-extrabold uppercase">Atur Modal Kas</span>
+                                    <h3 class="text-sm font-extrabold text-[#0b132b]">Pengaturan Setoran Modal Awal Kas Perusahaan (Akun 1101 &amp; 3101)</h3>
+                                </div>
+                                <p class="text-xs text-slate-500">Tentukan atau ubah nominal Setoran Modal Awal Kas sesuai keinginan Anda (ketik <code class="font-bold text-slate-700">0</code> atau klik <strong>Reset Rp 0</strong> jika ingin memulai tanpa modal awal).</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-lg bg-blue-100/80 text-blue-800 text-xs font-extrabold shrink-0">Modal Kas Saat Ini: <strong id="ovCurrentModalCashLabel">Rp 0</strong></span>
+                        </div>
+                        <form id="formQuickSetModalCash" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pt-2 border-t border-slate-200/70">
+                            <div class="sm:col-span-3">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal Modal</label>
+                                <input type="date" id="quickModalDateInput" value="2026-01-01" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800">
+                            </div>
+                            <div class="sm:col-span-5">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal Setoran Modal Kas (Rp)</label>
+                                <input type="number" id="quickModalAmountInput" min="0" step="1000" placeholder="Masukkan nominal modal kas..." class="w-full bg-white border-2 border-blue-300 focus:border-blue-600 rounded-xl px-3.5 py-2 text-xs font-extrabold text-slate-900 focus:outline-none">
+                            </div>
+                            <div class="sm:col-span-4 flex items-center gap-2">
+                                <button type="submit" id="btnQuickSaveModalCash" class="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition shadow-sm whitespace-nowrap">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Modal Kas
+                                </button>
+                                <button type="button" onclick="resetOpeningCashCapitalToZero()" class="px-3.5 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white font-extrabold text-xs transition shrink-0 whitespace-nowrap" title="Nolkan Setoran Modal Awal Kas">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Rp 0
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Navigasi Cepat Modul Akuntansi -->
+                    <div class="clean-card p-5">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#0b132b] mb-3">Akses Cepat Modul Akuntansi Terintegrasi</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-11 gap-2.5">
+                            <button onclick="switchFinTab('jurnal')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-book text-emerald-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Jurnal Umum</span>
+                            </button>
+                            <button onclick="switchFinTab('bukubesar')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-layer-group text-blue-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Buku Besar</span>
+                            </button>
+                            <button onclick="switchFinTab('inventaris')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-boxes-stacked text-orange-500 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Inventaris</span>
+                            </button>
+                            <button onclick="switchFinTab('penjualan')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-sack-dollar text-emerald-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Penjualan</span>
+                            </button>
+                            <button onclick="switchFinTab('piutang')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-file-signature text-teal-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Piutang Usaha</span>
+                            </button>
+                            <button onclick="switchFinTab('biaya')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-wallet text-rose-500 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Kas Kecil</span>
+                            </button>
+                            <button onclick="switchFinTab('utang')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-hand-holding-dollar text-amber-500 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Utang Usaha</span>
+                            </button>
+                            <button onclick="switchFinTab('aruskas')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-money-bill-transfer text-cyan-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Arus Kas</span>
+                            </button>
+                            <button onclick="switchFinTab('neraca')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-scale-balanced text-indigo-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Neraca</span>
+                            </button>
+                            <button onclick="switchFinTab('penyesuaian')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-sliders text-sky-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Penyesuaian</span>
+                            </button>
+                            <button onclick="switchFinTab('tutupbuku')" class="p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-center transition space-y-1">
+                                <i class="fa-solid fa-lock text-purple-600 text-base"></i>
+                                <span class="block text-[11px] font-extrabold text-slate-800">Tutup Buku</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 2: JURNAL UMUM (General Journal) -->
+                <!-- ========================================================= -->
+                <div id="finTab_jurnal" class="fin-tab-panel hidden space-y-5">
+                    <!-- Form Tambah Jurnal Manual -->
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">Input Jurnal Umum / Penyesuaian Baru</h3>
+                                <p class="text-xs text-slate-500">Transaksi dari Kasir, Penjualan, Biaya, dan Utang sudah otomatis masuk ke tabel Jurnal di bawah.</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-extrabold">Double-Entry Balanced</span>
+                        </div>
+                        <form id="formAddManualJournal" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="jurnalDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Bukti / Ref</label>
+                                <input type="text" id="jurnalRefInput" placeholder="JU.2026.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Akun Debit</label>
+                                <select id="jurnalDebitAccSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Akun Kredit</label>
+                                <select id="jurnalCreditAccSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal (Rp)</label>
+                                <input type="number" id="jurnalAmountInput" placeholder="5000000" min="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Keterangan</label>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="jurnalDescInput" placeholder="Setoran modal / penyesuaian" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shrink-0">+ Posting</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tabel Jurnal Umum -->
+                    <div class="clean-card p-5 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-sm font-extrabold text-[#0b132b]">Daftar Jurnal Umum Terintegrasi</h3>
+                            <div class="flex items-center gap-4 text-xs font-extrabold">
+                                <span class="text-emerald-700">Total Debit: <strong id="jurnalTotalDebitEl">Rp 0</strong></span>
+                                <span class="text-blue-700">Total Kredit: <strong id="jurnalTotalCreditEl">Rp 0</strong></span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal</th>
+                                        <th class="py-3 px-3">No. Ref / Bukti</th>
+                                        <th class="py-3 px-3">Sumber Modul</th>
+                                        <th class="py-3 px-3">Keterangan &amp; Akun COA</th>
+                                        <th class="py-3 px-3 text-right">Debit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Kredit (Rp)</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="jurnalTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 3: BUKU BESAR (General Ledger) -->
+                <!-- ========================================================= -->
+                <div id="finTab_bukubesar" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">Buku Besar Per Akun (General Ledger)</h3>
+                                <p class="text-xs text-slate-500">Pilih akun COA untuk melihat mutasi Debit, Kredit, dan Saldo Berjalan (Running Balance).</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-extrabold text-slate-600">Pilih Akun COA:</label>
+                                <select id="ledgerAccountSelect" class="bg-slate-50 border-2 border-emerald-500 rounded-xl px-3.5 py-2 text-xs font-extrabold text-slate-800 focus:outline-none"></select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 text-xs">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Kode &amp; Nama Akun</span>
+                                <strong class="text-slate-800 font-extrabold" id="ledgerSumAccName">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Mutasi Debit</span>
+                                <strong class="text-emerald-700 font-extrabold" id="ledgerSumDebit">Rp 0</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Mutasi Kredit</span>
+                                <strong class="text-rose-600 font-extrabold" id="ledgerSumCredit">Rp 0</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Saldo Akhir Akun</span>
+                                <strong class="text-blue-700 font-black text-sm" id="ledgerSumBalance">Rp 0</strong>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal</th>
+                                        <th class="py-3 px-3">No. Referensi</th>
+                                        <th class="py-3 px-3">Keterangan Transaksi</th>
+                                        <th class="py-3 px-3 text-right">Mutasi Debit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Mutasi Kredit (Rp)</th>
+                                        <th class="py-3 px-3 text-right rounded-tr-xl">Saldo Berjalan (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ledgerTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL INVENTORY / INVENTARIS & SETORAN MODAL AWAL -->
+                <!-- ========================================================= -->
+                <div id="finTab_inventaris" class="fin-tab-panel hidden space-y-5">
+                    <!-- 1. Pengaturan Setoran Modal Awal Kas Sesuai Keinginan (Tanpa Terpotong) -->
+                    <div class="clean-card p-5 border-l-4 border-l-blue-600 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-extrabold uppercase">Modal Awal Kas</span>
+                                    <h3 class="text-sm font-extrabold text-[#0b132b]">1. Pengaturan Setoran Modal Awal Kas Perusahaan (Akun 1101 &amp; 3101)</h3>
+                                </div>
+                                <p class="text-xs text-slate-500">Atur bebas nominal Setoran Modal Awal Kas sesuai keinginan Anda (atau klik <strong>Reset Rp 0</strong>). Perubahan langsung memperbarui Saldo Kas, Arus Kas, Buku Besar &amp; Neraca.</p>
+                            </div>
+                        </div>
+                        <form id="formInvSetModalCash" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pt-2 border-t border-slate-100">
+                            <div class="sm:col-span-3">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="invModalDateInput" value="2026-01-01" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800">
+                            </div>
+                            <div class="sm:col-span-5">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal Setoran Modal Kas (Rp)</label>
+                                <input type="number" id="invModalAmountInput" min="0" step="1000" placeholder="Masukkan nominal modal kas..." class="w-full bg-slate-50 border-2 border-blue-300 focus:border-blue-600 rounded-xl px-3.5 py-2 text-xs font-extrabold text-slate-900 focus:outline-none">
+                            </div>
+                            <div class="sm:col-span-4 flex items-center gap-2">
+                                <button type="submit" id="btnInvSaveModalCash" class="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition shadow-sm whitespace-nowrap">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Modal Kas
+                                </button>
+                                <button type="button" onclick="resetOpeningCashCapitalToZero()" class="px-3.5 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white font-extrabold text-xs transition shrink-0 whitespace-nowrap">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Rp 0
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Kelola Aset Inventaris & Peralatan Cabang (Akun 1201) -->
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">2. Kelola Inventaris &amp; Peralatan Cabang (Akun 1201 - Peralatan, Timbangan &amp; Inventaris)</h3>
+                                <p class="text-xs text-slate-500">Tambah, ubah nominal, atau hapus daftar inventaris perusahaan/cabang (timbangan digital, alat XRF, brankas, komputer, dll). Otomatis terintegrasi ke Neraca &amp; Buku Besar.</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 text-[11px] font-extrabold">Total Inventaris (1201): <strong id="invAssetTotalBadge">Rp 0</strong></span>
+                        </div>
+
+                        <form id="formAddInventoryAsset" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="invAssetDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Kode Inventaris</label>
+                                <input type="text" id="invAssetRefInput" placeholder="INV.AST.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nama Barang / Inventaris</label>
+                                <input type="text" id="invAssetNameInput" placeholder="Timbangan Digital / XRF / Brankas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cabang / Lokasi</label>
+                                <select id="invAssetBranchSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="0">Pusat / Semua Cabang</option>
+                                    <option value="1">Jakarta</option>
+                                    <option value="2">Gading Serpong</option>
+                                    <option value="3">Bekasi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Qty (Unit)</label>
+                                <input type="number" id="invAssetQtyInput" min="1" value="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Sumber Perolehan (Kredit)</label>
+                                <select id="invAssetSourceSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="3101">3101 - Setoran Modal Inventaris</option>
+                                    <option value="1101">1101 - Pembelian dari Kas &amp; Bank</option>
+                                    <option value="2101">2101 - Pembelian Kredit (Utang Usaha)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nilai Total (Rp)</label>
+                                <div class="flex gap-1.5">
+                                    <input type="number" id="invAssetAmountInput" min="1000" placeholder="15000000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-extrabold text-xs shrink-0">+ Simpan</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal &amp; Kode</th>
+                                        <th class="py-3 px-3">Nama Barang / Aset Inventaris</th>
+                                        <th class="py-3 px-3">Cabang</th>
+                                        <th class="py-3 px-3 text-center">Qty</th>
+                                        <th class="py-3 px-3">Sumber Perolehan</th>
+                                        <th class="py-3 px-3 text-right">Nilai Inventaris (Rp)</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryAssetsTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 3. Inventory Persediaan Stok Emas (Akun 1102) -->
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">3. Inventory Persediaan Stok Emas (Akun 1102 - Persediaan Emas)</h3>
+                                <p class="text-xs text-slate-500">Rekapitulasi stok fisik emas yang masuk dari Nota Pembelian Kasir dikurangi Penjualan/Peleburan Emas.</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-[11px] font-extrabold">Terintegrasi Kasir &amp; Penjualan</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 text-xs">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Emas Masuk (Kasir)</span>
+                                <strong class="text-emerald-700 font-extrabold text-sm" id="invGoldInGramEl">0 Gram</strong>
+                                <span class="text-[11px] text-slate-500 block" id="invGoldInRpEl">Rp 0</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Emas Keluar (Terjual)</span>
+                                <strong class="text-rose-600 font-extrabold text-sm" id="invGoldOutGramEl">0 Gram</strong>
+                                <span class="text-[11px] text-slate-500 block" id="invGoldOutRpEl">HPP: Rp 0</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Stok Fisik Emas Tersedia</span>
+                                <strong class="text-purple-700 font-black text-sm" id="invGoldNetGramEl">0 Gram</strong>
+                                <span class="text-[11px] text-slate-500 block">Saldo Fisik Gudang/Brankas</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Nilai Persediaan Emas (1102)</span>
+                                <strong class="text-blue-700 font-black text-sm" id="invGoldBalanceRpEl">Rp 0</strong>
+                                <span class="text-[11px] text-slate-500 block">Sesuai Neraca Akun 1102</span>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal</th>
+                                        <th class="py-3 px-3">No. Nota / Invoice</th>
+                                        <th class="py-3 px-3">Tipe Mutasi</th>
+                                        <th class="py-3 px-3">Rincian Material / Buyer &amp; Cabang</th>
+                                        <th class="py-3 px-3 text-right">Berat (Gram)</th>
+                                        <th class="py-3 px-3 text-right rounded-tr-xl">Nilai Persediaan / HPP (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryGoldMutationTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 4: PENJUALAN EMAS (Sales / Peleburan) -->
+                <!-- ========================================================= -->
+                <div id="finTab_penjualan" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">Input Penjualan / Peleburan Emas ke Buyer / Pabrik</h3>
+                                <p class="text-xs text-slate-500">Otomatis menambah Kas/Piutang, mengurangi Persediaan Emas (HPP), dan menghitung Laba Kotor.</p>
+                            </div>
+                        </div>
+                        <form id="formAddSale" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="saleDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Invoice Jual</label>
+                                <input type="text" id="saleInvInput" placeholder="INV.SLS.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nama Buyer / Pabrik</label>
+                                <input type="text" id="saleBuyerInput" placeholder="PT Logam Mulia Refinery" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cabang Asal</label>
+                                <select id="saleBranchSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="1">Jakarta</option>
+                                    <option value="2">Gading Serpong</option>
+                                    <option value="3">Bekasi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Berat Dijual (Gram)</label>
+                                <input type="number" step="0.01" min="0.01" id="saleWeightInput" placeholder="10" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Total Harga Jual (Rp)</label>
+                                <input type="number" min="1000" id="saleTotalInput" placeholder="29500000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">HPP Pokok Emas (Rp)</label>
+                                <div class="flex gap-1.5">
+                                    <input type="number" min="0" id="saleCogsInput" placeholder="27500000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shrink-0">+ Simpan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="clean-card p-5 space-y-3">
+                        <h3 class="text-sm font-extrabold text-[#0b132b]">Riwayat Penjualan &amp; Peleburan Emas</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal &amp; Invoice</th>
+                                        <th class="py-3 px-3">Buyer / Tujuan</th>
+                                        <th class="py-3 px-3">Cabang</th>
+                                        <th class="py-3 px-3 text-right">Berat (Gram)</th>
+                                        <th class="py-3 px-3 text-right">Nilai Penjualan (Rp)</th>
+                                        <th class="py-3 px-3 text-right">HPP Emas (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Margin Laba (Rp)</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL PIUTANG USAHA (Accounts Receivable - 1103) -->
+                <!-- ========================================================= -->
+                <div id="finTab_piutang" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">Catat Piutang Usaha Baru (Buyer / Pabrik / Mitra)</h3>
+                                <p class="text-xs text-slate-500">Otomatis menambah saldo Akun <strong>1103 - Piutang Usaha Buyer / Refinery</strong> di Neraca &amp; Buku Besar.</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 text-[11px] font-extrabold">Akun 1103 - Piutang Usaha</span>
+                        </div>
+                        <form id="formAddReceivable" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="arDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Faktur / Piutang</label>
+                                <input type="text" id="arRefInput" placeholder="AR.2026.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nama Debitur / Buyer</label>
+                                <input type="text" id="arDebtorInput" placeholder="PT Refinery / Buyer Emas" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cabang</label>
+                                <select id="arBranchSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="1">Jakarta</option>
+                                    <option value="2">Gading Serpong</option>
+                                    <option value="3">Bekasi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Jatuh Tempo</label>
+                                <input type="date" id="arDueInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal Piutang (Rp)</label>
+                                <input type="number" min="1000" id="arAmountInput" placeholder="15000000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Keterangan</label>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="arDescInput" placeholder="Tagihan penjualan tempo" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs shrink-0">+ Catat</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="clean-card p-5 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-sm font-extrabold text-[#0b132b]">Daftar Piutang Usaha &amp; Status Penerimaan Pelunasan</h3>
+                            <div class="flex flex-wrap items-center gap-4 text-xs font-extrabold">
+                                <span class="text-slate-600">Total Piutang: <strong id="arSumTotalEl" class="text-slate-900">Rp 0</strong></span>
+                                <span class="text-emerald-700">Sudah Diterima: <strong id="arSumPaidEl">Rp 0</strong></span>
+                                <span class="text-teal-700">Sisa Piutang: <strong id="arSumRemEl">Rp 0</strong></span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal &amp; No. Faktur</th>
+                                        <th class="py-3 px-3">Debitur / Buyer</th>
+                                        <th class="py-3 px-3">Cabang</th>
+                                        <th class="py-3 px-3">Keterangan &amp; Jatuh Tempo</th>
+                                        <th class="py-3 px-3 text-right">Total Piutang (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Sudah Diterima (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Sisa Piutang (Rp)</th>
+                                        <th class="py-3 px-3 text-center">Status</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="receivablesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 5: KAS KECIL TERPISAH (Petty Cash - Pemasukan & Pengeluaran Harian) -->
+                <!-- ========================================================= -->
+                <div id="finTab_biaya" class="fin-tab-panel hidden space-y-5">
+                    <!-- 1. Pengaturan Saldo Awal Kas Kecil Terpisah -->
+                    <div class="clean-card p-5 border-l-4 border-l-emerald-600 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-extrabold uppercase">Kas Kecil Terpisah</span>
+                                    <h3 class="text-sm font-extrabold text-[#0b132b]">1. Pengaturan Saldo Awal Kas Kecil (Petty Cash)</h3>
+                                </div>
+                                <p class="text-xs text-slate-500">Masukkan atau perbarui Saldo Awal Kas Kecil terpisah untuk kebutuhan operasional harian.</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-extrabold shrink-0">Saldo Awal Kas Kecil: <strong id="pettyOpeningCurrentBadge">Rp 0</strong></span>
+                        </div>
+                        <form id="formSetPettyCashOpening" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pt-2 border-t border-slate-100">
+                            <div class="sm:col-span-3">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal Saldo Awal</label>
+                                <input type="date" id="pettyOpeningDateInput" value="2026-01-01" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800">
+                            </div>
+                            <div class="sm:col-span-5">
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal Saldo Awal Kas Kecil (Rp)</label>
+                                <input type="number" id="pettyOpeningAmountInput" min="0" step="1000" placeholder="Masukkan saldo awal kas kecil..." class="w-full bg-slate-50 border-2 border-emerald-300 focus:border-emerald-600 rounded-xl px-3.5 py-2 text-xs font-extrabold text-slate-900 focus:outline-none">
+                            </div>
+                            <div class="sm:col-span-4 flex items-center gap-2">
+                                <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition shadow-sm whitespace-nowrap">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Saldo Awal
+                                </button>
+                                <button type="button" onclick="resetPettyCashOpeningToZero()" class="px-3.5 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white font-extrabold text-xs transition shrink-0 whitespace-nowrap">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset Rp 0
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2. Input Pemasukan & Pengeluaran Biaya Kebutuhan Harian Kas Kecil -->
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">2. Input Pemasukan &amp; Pengeluaran Biaya Kebutuhan Harian (Kas Kecil Terpisah)</h3>
+                                <p class="text-xs text-slate-500">Catat penambahan dana kas kecil (Pemasukan) maupun pengeluaran biaya kebutuhan harian cabang/kantor (Pengeluaran).</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-extrabold">Buku Kas Kecil Terpisah</span>
+                        </div>
+                        <form id="formAddExpense" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="expDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Bukti Kas Kecil</label>
+                                <input type="text" id="expRefInput" placeholder="BKK.2026.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Jenis Transaksi</label>
+                                <select id="expTypeSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-extrabold text-slate-800">
+                                    <option value="PENGELUARAN" selected>🔴 Pengeluaran Biaya Harian</option>
+                                    <option value="PEMASUKAN">🟢 Pemasukan / Top-Up Kas Kecil</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Kategori Kebutuhan / Akun</label>
+                                <select id="expAccountSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <optgroup label="Pemasukan Kas Kecil">
+                                        <option value="TOPUP">Penambahan / Pengisian Kas Kecil</option>
+                                    </optgroup>
+                                    <optgroup label="61xx - Kebutuhan &amp; Biaya Operasional Harian">
+                                        <option value="6101">6101 - Beban Gaji</option>
+                                        <option value="6102">6102 - Beban Bonus/Insentif</option>
+                                        <option value="6103">6103 - Beban Sewa</option>
+                                        <option value="6104">6104 - Beban Listrik</option>
+                                        <option value="6105">6105 - Beban Air</option>
+                                        <option value="6106">6106 - Beban Internet</option>
+                                        <option value="6107">6107 - Beban Keamanan</option>
+                                        <option value="6108">6108 - Beban Transportasi</option>
+                                        <option value="6109">6109 - Beban BBM</option>
+                                        <option value="6110">6110 - Beban Promosi &amp; Iklan</option>
+                                        <option value="6111" selected>6111 - Beban ATK &amp; Kebutuhan Harian</option>
+                                        <option value="6112">6112 - Beban Administrasi</option>
+                                        <option value="6113">6113 - Beban Reparasi &amp; Pemeliharaan</option>
+                                        <option value="6114">6114 - Beban Penyusutan</option>
+                                        <option value="6115">6115 - Beban Asuransi</option>
+                                        <option value="6116">6116 - Beban Kebersihan &amp; Konsumsi</option>
+                                        <option value="6117">6117 - Beban Legal &amp; Perizinan</option>
+                                        <option value="6118">6118 - Beban Bank &amp; Administrasi</option>
+                                        <option value="6119">6119 - Beban Lain-lain</option>
+                                    </optgroup>
+                                    <optgroup label="71xx - Beban Berbagi / Sosial &amp; Program JEI">
+                                        <option value="7101">7101 - Beban Berbagi/Amal</option>
+                                        <option value="7102">7102 - Bantuan Sosial</option>
+                                        <option value="7103">7103 - Santunan Karyawan</option>
+                                        <option value="7104">7104 - Program Masyarakat</option>
+                                        <option value="7105">7105 - Donasi</option>
+                                        <option value="7106">7106 - Program Jantung Emas</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cabang</label>
+                                <select id="expBranchSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="1">Jakarta</option>
+                                    <option value="2">Gading Serpong</option>
+                                    <option value="3">Bekasi</option>
+                                    <option value="0">Pusat / Semua Cabang</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal (Rp)</label>
+                                <input type="number" min="100" id="expAmountInput" placeholder="250000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Keterangan Harian</label>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="expDescInput" placeholder="Konsumsi / ATK / Parkir / Listrik" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shrink-0">+ Simpan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 3. Tabel Daftar Mutasi Kas Kecil Terpisah -->
+                    <div class="clean-card p-5 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-sm font-extrabold text-[#0b132b]">Daftar Mutasi Pemasukan &amp; Pengeluaran Kas Kecil</h3>
+                            <div class="flex flex-wrap items-center gap-4 text-xs font-extrabold">
+                                <span class="text-slate-600">Saldo Awal: <strong id="pettySumOpeningEl" class="text-slate-900">Rp 0</strong></span>
+                                <span class="text-emerald-700">Total Pemasukan: <strong id="pettySumInEl">Rp 0</strong></span>
+                                <span class="text-rose-600">Total Pengeluaran: <strong id="pettySumOutEl">Rp 0</strong></span>
+                                <span class="text-blue-700">Sisa Saldo Kas Kecil: <strong id="pettySumBalanceEl">Rp 0</strong></span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal &amp; Bukti</th>
+                                        <th class="py-3 px-3">Jenis</th>
+                                        <th class="py-3 px-3">Kategori / Akun</th>
+                                        <th class="py-3 px-3">Cabang</th>
+                                        <th class="py-3 px-3">Keterangan Kebutuhan Harian</th>
+                                        <th class="py-3 px-3 text-right">Pemasukan (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Pengeluaran (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Saldo Kas Kecil (Rp)</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expensesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 6: UTANG USAHA (Accounts Payable) -->
+                <!-- ========================================================= -->
+                <div id="finTab_utang" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-5 space-y-4">
+                        <h3 class="text-sm font-extrabold text-[#0b132b]">Catat Utang Usaha / Pinjaman Modal Kerja Baru</h3>
+                        <form id="formAddPayable" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal</label>
+                                <input type="date" id="apDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Kontrak / Faktur</label>
+                                <input type="text" id="apRefInput" placeholder="AP.2026.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nama Kreditur / Supplier</label>
+                                <input type="text" id="apVendorInput" placeholder="Vendor Peralatan / Investor" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Jatuh Tempo</label>
+                                <input type="date" id="apDueInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal Utang (Rp)</label>
+                                <input type="number" min="1000" id="apAmountInput" placeholder="15000000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Keterangan</label>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="apDescInput" placeholder="Tambahan kas modal cabang" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs shrink-0">+ Catat</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="clean-card p-5 space-y-3">
+                        <h3 class="text-sm font-extrabold text-[#0b132b]">Daftar Utang Usaha &amp; Status Pelunasan</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal &amp; No. Faktur</th>
+                                        <th class="py-3 px-3">Kreditur / Supplier</th>
+                                        <th class="py-3 px-3">Keterangan &amp; Jatuh Tempo</th>
+                                        <th class="py-3 px-3 text-right">Total Utang (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Sudah Dibayar (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Sisa Utang (Rp)</th>
+                                        <th class="py-3 px-3 text-center">Status</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payablesTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 7: ARUS KAS (Cash Flow Statement) -->
+                <!-- ========================================================= -->
+                <div id="finTab_aruskas" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                            <div>
+                                <h3 class="text-base font-extrabold text-[#0b132b]">LAPORAN ARUS KAS (STATEMENT OF CASH FLOWS)</h3>
+                                <p class="text-xs text-slate-500">Metode Langsung (Direct Method) — Terintegrasi dengan Kasir, Penjualan, Biaya &amp; Utang Usaha</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-cyan-50 text-cyan-700 font-extrabold text-xs" id="cfPeriodBadge">Semua Periode</span>
+                        </div>
+                        <div id="cashFlowReportContainer" class="space-y-4 text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 8: NERACA & LABA RUGI (Balance Sheet & Income Statement) -->
+                <!-- ========================================================= -->
+                <div id="finTab_neraca" class="fin-tab-panel hidden space-y-5">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Neraca Aktiva vs Pasiva -->
+                        <div class="clean-card p-6 space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-[#0b132b]">NERACA KEUANGAN (BALANCE SHEET)</h3>
+                                    <p class="text-[11px] text-slate-500">Posisi Aktiva (Aset) vs Pasiva (Kewajiban &amp; Ekuitas)</p>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-extrabold text-[11px]">AKTIVA = PASIVA</span>
+                            </div>
+                            <div id="balanceSheetContainer" class="space-y-4 text-xs"></div>
+                        </div>
+
+                        <!-- Laporan Laba Rugi Komprehensif -->
+                        <div class="clean-card p-6 space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-[#0b132b]">LAPORAN LABA RUGI (INCOME STATEMENT)</h3>
+                                    <p class="text-[11px] text-slate-500">Pendapatan Penjualan, HPP Emas, dan Beban Operasional</p>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 font-extrabold text-[11px]">TERINTEGRASI</span>
+                            </div>
+                            <div id="incomeStatementContainer" class="space-y-4 text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL JURNAL PENYESUAIAN (Adjusting Journal Entries - AJP) -->
+                <!-- ========================================================= -->
+                <div id="finTab_penyesuaian" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-5 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="text-sm font-extrabold text-[#0b132b]">Input Jurnal Penyesuaian (Adjusting Journal Entry / AJP)</h3>
+                                <p class="text-xs text-slate-500">Digunakan untuk penyesuaian akhir periode (penyusutan peralatan, penyesuaian stok emas, akrual beban/pendapatan) dan otomatis terintegrasi ke Buku Besar, Neraca &amp; Laba Rugi.</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 text-[11px] font-extrabold">Terintegrasi Neraca &amp; Laba Rugi</span>
+                        </div>
+                        <form id="formAddAdjustment" onsubmit="return false;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Tanggal AJP</label>
+                                <input type="date" id="adjDateInput" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">No. Bukti AJP</label>
+                                <input type="text" id="adjRefInput" placeholder="AJP.2026.001" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Cabang / Unit</label>
+                                <select id="adjBranchSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <option value="0">Pusat / Konsolidasi</option>
+                                    <option value="1">Jakarta</option>
+                                    <option value="2">Gading Serpong</option>
+                                    <option value="3">Bekasi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Akun Debit</label>
+                                <select id="adjDebitAccSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Akun Kredit</label>
+                                <select id="adjCreditAccSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Nominal (Rp)</label>
+                                <input type="number" id="adjAmountInput" placeholder="1500000" min="1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-extrabold uppercase text-slate-500 mb-1">Keterangan AJP</label>
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="adjDescInput" placeholder="Penyusutan peralatan / penyesuaian" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold">
+                                    <button type="submit" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs shrink-0">+ Posting</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="clean-card p-5 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="text-sm font-extrabold text-[#0b132b]">Daftar Ayat Jurnal Penyesuaian (AJP)</h3>
+                            <div class="flex flex-wrap items-center gap-4 text-xs font-extrabold">
+                                <span class="text-slate-600">Total Ayat AJP: <strong id="adjCountEl" class="text-slate-900">0</strong></span>
+                                <span class="text-emerald-700">Total Debit AJP: <strong id="adjTotalDebitEl">Rp 0</strong></span>
+                                <span class="text-sky-700">Total Kredit AJP: <strong id="adjTotalCreditEl">Rp 0</strong></span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal</th>
+                                        <th class="py-3 px-3">No. Bukti AJP</th>
+                                        <th class="py-3 px-3">Cabang / Unit</th>
+                                        <th class="py-3 px-3">Uraian &amp; Akun Penyesuaian</th>
+                                        <th class="py-3 px-3 text-right">Debit (Rp)</th>
+                                        <th class="py-3 px-3 text-right">Kredit (Rp)</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adjustmentTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- MODUL 9: TUTUP BUKU PERIODE (Period Closing) -->
+                <!-- ========================================================= -->
+                <div id="finTab_tutupbuku" class="fin-tab-panel hidden space-y-5">
+                    <div class="clean-card p-6 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+                            <div>
+                                <h3 class="text-base font-extrabold text-[#0b132b]">Proses Tutup Buku Akuntansi (Period Closing)</h3>
+                                <p class="text-xs text-slate-500">Menutup akun Pendapatan &amp; Biaya pada periode terpilih dan memindahkan Laba/Rugi Bersih ke akun <strong>3102 - Laba Ditahan (Retained Earnings)</strong>.</p>
+                            </div>
+                            <button type="button" id="btnExecuteClosing" class="px-5 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs flex items-center gap-2 shadow-md transition shrink-0">
+                                <i class="fa-solid fa-lock"></i> Proses Tutup Buku Periode Ini
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-xs">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Pendapatan Periode</span>
+                                <strong class="text-emerald-700 font-extrabold text-sm" id="closePreviewRev">Rp 0</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total HPP Emas</span>
+                                <strong class="text-amber-600 font-extrabold text-sm" id="closePreviewCogs">Rp 0</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Total Biaya Operasional</span>
+                                <strong class="text-rose-600 font-extrabold text-sm" id="closePreviewExp">Rp 0</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold uppercase text-slate-400 block">Ikhtisar Laba/Rugi Ditutup</span>
+                                <strong class="text-purple-700 font-black text-sm" id="closePreviewNet">Rp 0</strong>
+                            </div>
+                        </div>
+
+                        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-600 pt-2">Riwayat Tutup Buku Periode</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0b132b] text-white uppercase text-[10px] tracking-wider">
+                                        <th class="py-3 px-3 rounded-tl-xl">Tanggal Tutup Buku</th>
+                                        <th class="py-3 px-3">No. Jurnal Penutup</th>
+                                        <th class="py-3 px-3">Periode Ditutup</th>
+                                        <th class="py-3 px-3 text-right">Total Pendapatan</th>
+                                        <th class="py-3 px-3 text-right">Total HPP &amp; Biaya</th>
+                                        <th class="py-3 px-3 text-right">Laba Bersih ke Laba Ditahan</th>
+                                        <th class="py-3 px-3 text-center rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="closingTableBody" class="divide-y divide-slate-200/70"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="mt-8 pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 font-medium">
+                <span>Jantung Emas Indonesia &copy; 2026 &mdash; Sistem Keuangan &amp; Akuntansi Terintegrasi</span>
+                <span>1 Menu 1 Tampilan &bull; Export PDF &amp; Excel Ready</span>
+            </footer>
+        </div>
+    </section>
+    <script src="../src/js/jei-core.js"></script>
+    <script src="../src/js/keuangan.js"></script>
+</body>
+</html>
